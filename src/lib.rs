@@ -58,6 +58,8 @@ SOFTWARE.
 //! ```rust
 //! use bit_ops::bitops_u64;
 //!
+//! // PREREQUISITES: Some Definitions
+//!
 //! /// See specification of the x86 IOAPIC redirection entry for more details.
 //! mod x86_ioapic {
 //!     pub const VECTOR_BITS: u64 = 8;
@@ -75,7 +77,7 @@ SOFTWARE.
 //!     pub const DESTINATION_BITS: u64 = 8;
 //!     pub const DESTINATION_SHIFT: u64 = 56;
 //! }
-//! // example properties for an x86 IOAPIC redirection entry
+//!
 //! let vector = 7;
 //! let delivery_mode = 0b111; // ExtInt
 //! let destination_mode = 0; // physical
@@ -85,6 +87,8 @@ SOFTWARE.
 //! let destination = 13;
 //!
 //! use x86_ioapic::*;
+//!
+//!  // ACTUAL LIBRARY USAGE BEGINS HERE
 //!
 //! let redirection_entry = bitops_u64::set_bits_exact_n(
 //!     0,

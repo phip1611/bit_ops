@@ -1,5 +1,9 @@
 # Unreleased
 
+# v0.1.6 - 2024-07-13
+
+- Doc fixes
+
 # v0.1.5 - 2024-07-13
 
 - Trait API: add `#[inline]` and `#[must_use]` to each function impl

@@ -29,6 +29,7 @@ SOFTWARE.
 //! `no_std` and `const` compatibility. Unlike other crates that provide tooling to
 //! create sophisticated high-level types with bitfields, the focus of `bit_ops` is
 //! on raw primitive integer types.
+//!
 //! ## API
 //!
 //! This crate exports a Function API and a Trait API. The Function API is

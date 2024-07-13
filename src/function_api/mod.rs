@@ -84,60 +84,6 @@ mod tests {
     }
 
     #[test]
-    fn create_mask() {
-        assert_eq!(bitops_u8::create_mask(0), 0);
-        assert_eq!(bitops_u8::create_mask(1), 0b1);
-        assert_eq!(bitops_u8::create_mask(2), 0b11);
-        assert_eq!(bitops_u8::create_mask(3), 0b111);
-        assert_eq!(bitops_u8::create_mask(8), 0xff);
-
-        assert_eq!(bitops_u64::create_mask(0), 0);
-        assert_eq!(bitops_u64::create_mask(64), u64::MAX);
-    }
-
-    #[test]
-    fn highest_bit() {
-        assert_eq!(bitops_u8::highest_bit(0), None);
-        assert_eq!(bitops_u8::highest_bit(1), Some(0));
-        assert_eq!(bitops_u8::highest_bit(0b10), Some(1));
-        assert_eq!(bitops_u8::highest_bit(0b11), Some(1));
-        assert_eq!(bitops_u8::highest_bit(u8::MAX), Some(7));
-
-        assert_eq!(bitops_u64::highest_bit(0), None);
-        assert_eq!(bitops_u64::highest_bit(1), Some(0));
-        assert_eq!(bitops_u64::highest_bit(0b10), Some(1));
-        assert_eq!(bitops_u64::highest_bit(0b11), Some(1));
-        assert_eq!(bitops_u64::highest_bit(u64::MAX), Some(63));
-    }
-
-    #[test]
-    fn lowest_bit() {
-        assert_eq!(bitops_u8::lowest_bit(0), None);
-        assert_eq!(bitops_u8::lowest_bit(1), Some(0));
-        assert_eq!(bitops_u8::lowest_bit(0b1000_0001), Some(0));
-        assert_eq!(bitops_u8::lowest_bit(0b1000_0010), Some(1));
-        assert_eq!(bitops_u8::lowest_bit(u8::MAX), Some(0));
-
-        assert_eq!(bitops_u64::lowest_bit(0), None);
-        assert_eq!(bitops_u64::lowest_bit(1), Some(0));
-        assert_eq!(bitops_u64::lowest_bit(0b1000_0001), Some(0));
-        assert_eq!(bitops_u64::lowest_bit(0b1000_0010), Some(1));
-        assert_eq!(bitops_u64::lowest_bit(u64::MAX), Some(0));
-    }
-
-    #[test]
-    fn clear_bits() {
-        assert_eq!(bitops_u8::clear_bits(0, 0), 0);
-        assert_eq!(bitops_u8::clear_bits(0b11111111, 0), 0b11111111);
-        assert_eq!(bitops_u8::clear_bits(0b11111111, 0b01111110), 0b10000001);
-
-        assert_eq!(bitops_u64::clear_bits(0, 0), 0);
-        assert_eq!(bitops_u64::clear_bits(0b11111111, 0), 0b11111111);
-        assert_eq!(bitops_u64::clear_bits(0b11111111, 0b01111110), 0b10000001);
-        assert_eq!(bitops_u64::clear_bits(u64::MAX, u64::MAX), 0);
-    }
-
-    #[test]
     fn set_bits() {
         assert_eq!(bitops_u8::set_bits(0, 0, 0, 0), 0);
         assert_eq!(bitops_u8::set_bits(5, 0, 0, 0), 5);
@@ -178,5 +124,69 @@ mod tests {
             bitops_u64::set_bits_exact(0b11111111, 0b10101, 5, 3),
             0b10101111
         );
+    }
+
+    #[test]
+    fn clear_bits() {
+        assert_eq!(bitops_u8::clear_bits(0, 0), 0);
+        assert_eq!(bitops_u8::clear_bits(0b11111111, 0), 0b11111111);
+        assert_eq!(bitops_u8::clear_bits(0b11111111, 0b01111110), 0b10000001);
+
+        assert_eq!(bitops_u64::clear_bits(0, 0), 0);
+        assert_eq!(bitops_u64::clear_bits(0b11111111, 0), 0b11111111);
+        assert_eq!(bitops_u64::clear_bits(0b11111111, 0b01111110), 0b10000001);
+        assert_eq!(bitops_u64::clear_bits(u64::MAX, u64::MAX), 0);
+    }
+
+    #[test]
+    fn highest_bit() {
+        assert_eq!(bitops_u8::highest_bit(0), None);
+        assert_eq!(bitops_u8::highest_bit(1), Some(0));
+        assert_eq!(bitops_u8::highest_bit(0b10), Some(1));
+        assert_eq!(bitops_u8::highest_bit(0b11), Some(1));
+        assert_eq!(bitops_u8::highest_bit(u8::MAX), Some(7));
+
+        assert_eq!(bitops_u64::highest_bit(0), None);
+        assert_eq!(bitops_u64::highest_bit(1), Some(0));
+        assert_eq!(bitops_u64::highest_bit(0b10), Some(1));
+        assert_eq!(bitops_u64::highest_bit(0b11), Some(1));
+        assert_eq!(bitops_u64::highest_bit(u64::MAX), Some(63));
+    }
+
+    #[test]
+    fn lowest_bit() {
+        assert_eq!(bitops_u8::lowest_bit(0), None);
+        assert_eq!(bitops_u8::lowest_bit(1), Some(0));
+        assert_eq!(bitops_u8::lowest_bit(0b1000_0001), Some(0));
+        assert_eq!(bitops_u8::lowest_bit(0b1000_0010), Some(1));
+        assert_eq!(bitops_u8::lowest_bit(u8::MAX), Some(0));
+
+        assert_eq!(bitops_u64::lowest_bit(0), None);
+        assert_eq!(bitops_u64::lowest_bit(1), Some(0));
+        assert_eq!(bitops_u64::lowest_bit(0b1000_0001), Some(0));
+        assert_eq!(bitops_u64::lowest_bit(0b1000_0010), Some(1));
+        assert_eq!(bitops_u64::lowest_bit(u64::MAX), Some(0));
+    }
+
+    #[test]
+    fn create_mask() {
+        assert_eq!(bitops_u8::create_mask(0), 0);
+        assert_eq!(bitops_u8::create_mask(1), 0b1);
+        assert_eq!(bitops_u8::create_mask(2), 0b11);
+        assert_eq!(bitops_u8::create_mask(3), 0b111);
+        assert_eq!(bitops_u8::create_mask(8), 0xff);
+
+        assert_eq!(bitops_u64::create_mask(0), 0);
+        assert_eq!(bitops_u64::create_mask(64), u64::MAX);
+    }
+
+    #[test]
+    fn create_mask_shifted() {
+        assert_eq!(bitops_u8::create_shifted_mask(0, 5), 0);
+        assert_eq!(bitops_u8::create_shifted_mask(1, 5), 0b10_0000);
+        assert_eq!(bitops_u8::create_shifted_mask(2, 5), 0b110_0000);
+        assert_eq!(bitops_u8::create_shifted_mask(3, 5), 0b1110_0000);
+
+        assert_eq!(bitops_u64::create_shifted_mask(1, 63), u64::MAX / 2 + 1);
     }
 }

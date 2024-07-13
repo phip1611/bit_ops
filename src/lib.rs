@@ -1,3 +1,26 @@
+/*
+MIT License
+
+Copyright (c) 2024 Philipp Schuster
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/
 //! # bit-ops
 //!
 //! ## About
@@ -93,6 +116,29 @@
 //! let raw = 0_u64.set_bit(1).set_bit(2);
 //! assert_eq!(raw, 0b110);
 //! ```
+
+#![deny(
+    clippy::all,
+    clippy::cargo,
+    clippy::nursery,
+    clippy::must_use_candidate,
+    // clippy::restriction,
+    // clippy::pedantic
+)]
+// now allow a few rules which are denied by the above statement
+// --> they are ridiculous and not necessary
+#![allow(
+    clippy::suboptimal_flops,
+    clippy::redundant_pub_crate,
+    clippy::fallible_impl_from
+)]
+// I can't do anything about this; fault of the dependencies
+#![allow(clippy::multiple_crate_versions)]
+// allow: required because of derive macro.. :(
+#![allow(clippy::use_self)]
+#![deny(missing_docs)]
+#![deny(missing_debug_implementations)]
+#![deny(rustdoc::all)]
 
 mod function_api;
 mod trait_api;

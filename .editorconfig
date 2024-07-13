@@ -13,4 +13,3 @@ max_line_length = 80
 
 [{*.sh,*.toml,*.yml}]
 indent_size = 2
-

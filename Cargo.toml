@@ -10,8 +10,16 @@ to work on raw integers. Thus, bit_ops chose a manual and more direct approach.
 version = "0.1.0"
 edition = "2021"
 authors = [
-    "Philipp Schuster <phip1611@gmail.com>"
+  "Philipp Schuster <phip1611@gmail.com>"
 ]
+keywords = ["bitwise", "bits"]
+categories = ["no-std", "data-structures", "encoding"]
+readme = "README.md"
+license = "MIT"
+homepage = "https://github.com/phip1611/bit_ops"
+repository = "https://github.com/phip1611/bit_ops"
+documentation = "https://docs.rs/bit_ops"
+rust-version = "1.57" # MSRV
 
 [dependencies]
 paste = "1.0.15"

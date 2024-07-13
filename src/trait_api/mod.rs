@@ -30,10 +30,9 @@ pub trait BitOps: Copy + Sized {
     /// Sets the bits of `value` in `base` without clearing already set bits.
     ///
     /// # Parameters
-    /// - `base`: Base value to set bits in.
     /// - `value`: New value/bits to be set in `base`, but unshifted.
     /// - `value_bits`: Amount of bits of `value` that are relevant, starting from the right.
-    /// - `value_shit`: Position of `value` inside `base`.
+    /// - `value_shit`: Position of `value` inside `self`.
     #[must_use]
     fn set_bits(self, value: Self, value_bits: Self, value_shift: Self) -> Self;
 
@@ -68,7 +67,6 @@ pub trait BitOps: Copy + Sized {
     /// Clears all bits specified in the mask by setting them to `0`.
     ///
     /// # Parameters
-    /// - `base`: Base value to set bits in.
     /// - `clear_mask`: Bitmask with bits to clear.
     #[must_use]
     fn clear_bits(self, clear_mask: Self) -> Self;

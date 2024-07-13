@@ -35,8 +35,8 @@ macro_rules! impl_bit_ops {
         /// ```
         ///
         /// # Panics
-        ///
-        /// Panics for invalid values of `bit`.
+        /// This function panics for bit positions that are outside the range of
+        /// the underlying type.
         #[must_use]
         #[inline]
         pub const fn set_bit(val: $primitive_ty, bit: $primitive_ty) -> $primitive_ty {
@@ -57,8 +57,8 @@ macro_rules! impl_bit_ops {
         /// ```
         ///
         /// # Panics
-        ///
-        /// Panics for invalid values of `bit`.
+        /// This function panics for bit positions that are outside the range of
+        /// the underlying type.
         #[must_use]
         #[inline]
         pub const fn clear_bit(val: $primitive_ty, bit: $primitive_ty) -> $primitive_ty {
@@ -81,8 +81,8 @@ macro_rules! impl_bit_ops {
         /// ```
         ///
         /// # Panics
-        ///
-        /// Panics for invalid values of `bit`.
+        /// This function panics for bit positions that are outside the range of
+        /// the underlying type.
         #[must_use]
         #[inline]
         pub const fn is_set(val: $primitive_ty, bit: $primitive_ty) -> bool {
@@ -105,8 +105,8 @@ macro_rules! impl_bit_ops {
         /// ```
         ///
         /// # Panics
-        ///
-        /// Panics for invalid values of `bit`.
+        /// This function panics for bit positions that are outside the range of
+        /// the underlying type.
         #[must_use]
         #[inline]
         pub const fn toggle(val: $primitive_ty, bit: $primitive_ty) -> $primitive_ty {
@@ -146,10 +146,8 @@ macro_rules! impl_bit_ops {
         /// ```
         ///
         /// # Panics
-        ///
-        /// Panics for invalid values of `value_bits` or `value_shift`.
-        /// Only `0..=64` are valid. Shifting bits outside of the type panics
-        /// as well.
+        /// This function panics for overflowing shifts and bit positions that
+        /// are outside the range of the underlying type.
         #[must_use]
         #[inline]
         pub const fn set_bits(
@@ -199,10 +197,8 @@ macro_rules! impl_bit_ops {
         /// ```
         ///
         /// # Panics
-        ///
-        /// Panics for invalid values of `value_bits` or `value_shift`.
-        /// Only `0..=64` are valid. Shifting bits outside of the type panics
-        /// as well.
+        /// This function panics for overflowing shifts and bit positions that
+        /// are outside the range of the underlying type.
         #[must_use]
         #[inline]
         // TODO make const as soon as for-loops can be in const fn
@@ -223,9 +219,9 @@ macro_rules! impl_bit_ops {
         #[inline]
         pub const fn set_bits_exact(
             base: $primitive_ty,
-            value: $primitive_ty,       /* unshifted new bits */
-            value_bits: $primitive_ty,  /* bits of value to use */
-            value_shift: $primitive_ty, /* bits to left-shift value before updating base  */
+            value: $primitive_ty,
+            value_bits: $primitive_ty,
+            value_shift: $primitive_ty,
         ) -> $primitive_ty {
             let clear_mask = create_mask(value_bits) << value_shift;
             let base = clear_bits(base, clear_mask);
@@ -325,8 +321,8 @@ macro_rules! impl_bit_ops {
         /// ```
         ///
         /// # Panics
-        ///
-        /// Panics for invalid values of `bits`. Only `0..=64` are valid.
+        /// This function panics for bit positions that are outside the range
+        /// of the underlying type.
         #[must_use]
         #[inline]
         pub const fn create_mask(bits: $primitive_ty) -> $primitive_ty {
@@ -355,10 +351,8 @@ macro_rules! impl_bit_ops {
         /// ```
         ///
         /// # Panics
-        ///
-        /// Panics for invalid values of `bits` or `bits`.
-        /// Only `0..=64` are valid. Shifting bits outside of the type panics
-        /// as well.
+        /// This function panics for overflowing shifts and bit positions that
+        /// are outside the range of the underlying type.
         #[must_use]
         #[inline]
         pub const fn create_shifted_mask(

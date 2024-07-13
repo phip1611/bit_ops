@@ -5,9 +5,10 @@ Bitwise operations on primitive integer types, but no_std and const-compatible.
 Provides a collection of typical bit manipulation operations that are primarily
 required in low-level development. Unlike other crates that provide tooling to
 create sophisticated high-level types with bitfields, the focus of bit_ops is
-to work on raw integers. Thus, bit_ops chose a manual and more direct approach.
+to work on raw integers. Thus, this crate put focus on a manual and more direct
+approach.
 """
-version = "0.1.0"
+version = "0.1.1"
 edition = "2021"
 authors = [
   "Philipp Schuster <phip1611@gmail.com>"

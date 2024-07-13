@@ -83,6 +83,15 @@ pub trait BitOps: Copy + Sized {
     #[must_use]
     fn lowest_bit(self) -> Option<Self>;
 
+    /// Get the requested bits as new integer.
+    ///
+    /// # Parameters
+    /// - `value_bits`: Amount of bits of `value` that are relevant, starting
+    ///                 from the right.
+    /// - `value_shit`: Position of `value` inside `self`.
+    #[must_use]
+    fn get_bits(self, value_bits: Self, value_shift: Self) -> Self;
+
     /// Creates a bitmask (`1`s) with the given amount of bits.
     #[must_use]
     fn create_mask(bits: Self) -> Self;

@@ -309,6 +309,29 @@ macro_rules! impl_bit_ops {
             }
         }
 
+        /// Get the requested bits as new integer.
+        ///
+        /// # Parameters
+        /// - `base`: Base value to get a specific set of bits from.
+        /// - `value_bits`: Amount of bits of `value` that are relevant, starting
+        ///                 from the right.
+        /// - `value_shit`: Position of `value` inside `self`.
+        ///
+        /// # Panics
+        /// This function panics for overflowing shifts and bit positions that
+        /// are outside the range of the underlying type.
+        #[must_use]
+        #[inline]
+        pub const fn get_bits(
+            base: $primitive_ty,
+            value_bits: $primitive_ty,
+            value_shift: $primitive_ty
+        ) -> $primitive_ty {
+            let mask = create_mask(value_bits);
+            (base >> value_shift) & mask
+        }
+
+
         /// Creates a bitmask (`1`s) with the given amount of bits.
         ///
         /// # Example

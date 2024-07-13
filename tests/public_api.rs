@@ -1,4 +1,4 @@
-use bit_ops::{BitOps, bitops_u64};
+use bit_ops::{bitops_u64, BitOps};
 
 #[test]
 fn test_public_function_api() {

@@ -131,7 +131,7 @@ macro_rules! impl_bit_ops {
         #[doc = concat!("use bit_ops::bitops_", stringify!($primitive_ty), "::set_bits;")]
         ///
         /// // props of a fictional interrupt controler
-        /// let delivery_mode = 111;
+        /// let delivery_mode = 0b111;
         /// let delivery_mode_bits = 3;
         /// let delivery_mode_shift = 3;
         /// assert_eq!(
@@ -165,6 +165,58 @@ macro_rules! impl_bit_ops {
             base | (value << value_shift)
         }
 
+        /// Version of [`set_bits`] that applies a list of multiple values to
+        /// the base.
+        ///
+        /// This function, unlike the others, is not `const` yet due to the
+        /// inner loop.
+        ///
+        /// # Parameters
+        /// - `base`: Base value to set bits in.
+        /// - `ops`: Tuple of (`value`, `value_bits`, `value_shift`)
+        ///
+        /// # Example
+        /// ```rust
+        #[doc = concat!("use bit_ops::bitops_", stringify!($primitive_ty), "::set_bits_n;")]
+        ///
+        /// // props of a fictional interrupt controler
+        /// let vector = 0b1_1101;
+        /// let vector_bits = 5;
+        /// let vector_shift = 0;
+        /// let delivery_mode = 0b111;
+        /// let delivery_mode_bits = 3;
+        /// let delivery_mode_shift = 5;
+        /// assert_eq!(
+        ///     set_bits_n(
+        ///         0,
+        ///         &[
+        ///             (vector, vector_bits, vector_shift),
+        ///             (delivery_mode, delivery_mode_bits, delivery_mode_shift),
+        ///         ],
+        ///     ),
+        ///     0b1111_1101
+        /// );
+        /// ```
+        ///
+        /// # Panics
+        ///
+        /// Panics for invalid values of `value_bits` or `value_shift`.
+        /// Only `0..=64` are valid. Shifting bits outside of the type panics
+        /// as well.
+        #[must_use]
+        #[inline]
+        // TODO make const as soon as for-loops can be in const fn
+        pub fn set_bits_n(
+            base: $primitive_ty,
+            ops: &[($primitive_ty /* value */, $primitive_ty /* value_bits */, $primitive_ty /* value_shift */)],
+        ) -> $primitive_ty {
+            let mut base = base;
+            for op in ops {
+                base = set_bits(base, op.0, op.1, op.2);
+            }
+            base
+        }
+
         /// Like [`set_bits`] but calls [`clear_bits`] beforehand for
         /// the relevant bits.
         #[must_use]
@@ -178,6 +230,23 @@ macro_rules! impl_bit_ops {
             let clear_mask = create_mask(value_bits) << value_shift;
             let base = clear_bits(base, clear_mask);
             set_bits(base, value, value_bits, value_shift)
+        }
+
+        /// Combination of [`set_bits_exact`] and [`set_bits_n`].
+        ///
+        /// This function, unlike the others, is not `const` yet due to the
+        /// inner loop.
+        #[must_use]
+        #[inline]
+        pub fn set_bits_exact_n(
+            base: $primitive_ty,
+            ops: &[($primitive_ty /* value */, $primitive_ty /* value_bits */, $primitive_ty /* value_shift */)],
+        ) -> $primitive_ty {
+            let mut base = base;
+            for op in ops {
+                base = set_bits_exact(base, op.0, op.1, op.2);
+            }
+            base
         }
 
         /// Clears all bits specified in the mask by setting them to `0`.
@@ -301,7 +370,6 @@ macro_rules! impl_bit_ops {
         }
     };
 }
-
 
 /// Implements the module wrapping the corresponding [`impl_bit_ops`] code.
 // #[macro_export]

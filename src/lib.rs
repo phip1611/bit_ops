@@ -36,10 +36,8 @@
 //!
 //! ## Comparison to Other Crates
 
-
-mod trait_api;
 mod function_api;
+mod trait_api;
 
 pub use function_api::*;
 pub use trait_api::*;
-

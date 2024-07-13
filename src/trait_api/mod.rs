@@ -3,7 +3,6 @@ mod macros;
 
 /// Common bitwise operations to manipulate the bits in raw integers.
 pub trait BitOps: Copy + Sized {
-
     /// Sets the given bit to `1`.
     ///
     /// The bit position starts at `0`.
@@ -38,10 +37,33 @@ pub trait BitOps: Copy + Sized {
     #[must_use]
     fn set_bits(self, value: Self, value_bits: Self, value_shift: Self) -> Self;
 
+    /// Version of [`Self::set_bits`] that applies a list of multiple values to
+    /// the base.
+    #[must_use]
+    fn set_bits_n(
+        self,
+        ops: &[(
+            Self, /* value */
+            Self, /* value_bits */
+            Self, /* value_shift */
+        )],
+    ) -> Self;
+
     /// Like [`Self::set_bits`] but calls [`Self::clear_bits`] beforehand for
     /// the relevant bits.
     #[must_use]
     fn set_bits_exact(self, value: Self, value_bits: Self, value_shift: Self) -> Self;
+
+    /// Combination of [`Self::set_bits_exact`] and [`Self::set_bits_n`].
+    #[must_use]
+    fn set_bits_exact_n(
+        self,
+        ops: &[(
+            Self, /* value */
+            Self, /* value_bits */
+            Self, /* value_shift */
+        )],
+    ) -> Self;
 
     /// Clears all bits specified in the mask by setting them to `0`.
     ///
@@ -78,6 +100,4 @@ impl_trait!(u32);
 impl_trait!(u64);
 impl_trait!(usize);
 
-mod tests {
-
-}
+mod tests {}

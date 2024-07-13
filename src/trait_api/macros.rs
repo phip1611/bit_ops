@@ -53,6 +53,16 @@ macro_rules! impl_trait {
                 }
             }
 
+            #[doc = concat!("Wrapper around [`bitops_", stringify!($primitive_ty), "::set_bits_n`],")]
+            #[doc = concat!("but as associated function (method) on `", stringify!($primitive_ty), "`.")]
+            #[doc = ""] // newline needed so that markdown links work
+            #[doc = concat!("[`bitops_", stringify!($primitive_ty), "::set_bits_n`]: crate::bitops_", stringify!($primitive_ty), "::set_bits_n")]
+            fn set_bits_n(self, ops: &[(Self, Self, Self)]) -> Self {
+                paste::paste! {
+                    $crate::[< bitops _ $primitive_ty >]::set_bits_n(self, ops)
+                }
+            }
+
             #[doc = concat!("Wrapper around [`bitops_", stringify!($primitive_ty), "::set_bits_exact`],")]
             #[doc = concat!("but as associated function (method) on `", stringify!($primitive_ty), "`.")]
             #[doc = ""] // newline needed so that markdown links work
@@ -60,6 +70,16 @@ macro_rules! impl_trait {
             fn set_bits_exact(self, value: Self, value_bits: Self, value_shift: Self) -> Self {
                 paste::paste! {
                     $crate::[< bitops _ $primitive_ty >]::set_bits_exact(self, value, value_bits, value_shift)
+                }
+            }
+
+            #[doc = concat!("Wrapper around [`bitops_", stringify!($primitive_ty), "::set_bits_exact_n`],")]
+            #[doc = concat!("but as associated function (method) on `", stringify!($primitive_ty), "`.")]
+            #[doc = ""] // newline needed so that markdown links work
+            #[doc = concat!("[`bitops_", stringify!($primitive_ty), "::set_bits_exact_n`]: crate::bitops_", stringify!($primitive_ty), "::set_bits_exact_n")]
+            fn set_bits_exact_n(self, ops: &[(Self, Self, Self)]) -> Self {
+                paste::paste! {
+                    $crate::[< bitops _ $primitive_ty >]::set_bits_exact_n(self, ops)
                 }
             }
 

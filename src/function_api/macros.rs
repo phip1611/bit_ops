@@ -160,7 +160,7 @@ macro_rules! impl_bit_ops {
         /// ```rust
         #[doc = concat!("use bit_ops::bitops_", stringify!($primitive_ty), "::set_bits;")]
         ///
-        /// // props of a fictional interrupt controler
+        /// // props of a fictional interrupt controller
         /// let delivery_mode = 0b111;
         /// let delivery_mode_bits = 3;
         /// let delivery_mode_shift = 3;
@@ -209,7 +209,7 @@ macro_rules! impl_bit_ops {
         /// ```rust
         #[doc = concat!("use bit_ops::bitops_", stringify!($primitive_ty), "::set_bits_n;")]
         ///
-        /// // props of a fictional interrupt controler
+        /// // props of a fictional interrupt controller
         /// let vector = 0b1_1101;
         /// let vector_bits = 5;
         /// let vector_shift = 0;

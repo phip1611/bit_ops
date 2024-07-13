@@ -8,7 +8,7 @@ create sophisticated high-level types with bitfields, the focus of bit_ops is
 to work on raw integers. Thus, this crate put focus on a manual and more direct
 approach.
 """
-version = "0.1.1"
+version = "0.1.2"
 edition = "2021"
 authors = [
   "Philipp Schuster <phip1611@gmail.com>"

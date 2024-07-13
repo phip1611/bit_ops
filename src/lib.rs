@@ -106,8 +106,8 @@ SOFTWARE.
 //!
 //! ### Trait API
 //!
-//! The trait [`BitOps`] is implemented for `u8`, `u16`, `u32`, `u64`, and
-//! `usize`. It provides the same functionality as the function API, but you
+//! The trait [`BitOps`] is implemented for `u8`, `u16`, `u32`, `u64`, `u128`,
+//! and `usize`. It provides the same functionality as the function API, but you
 //! call each bit operation as associated function.
 //!
 //! #### Example

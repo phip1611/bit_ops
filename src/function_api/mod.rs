@@ -274,7 +274,11 @@ mod tests {
             delivery_mode
         );
         assert_eq!(
-            bitops_u64::get_bits(redirection_entry, DESTINATION_MODE_BITS, DESTINATION_MODE_SHIFT),
+            bitops_u64::get_bits(
+                redirection_entry,
+                DESTINATION_MODE_BITS,
+                DESTINATION_MODE_SHIFT
+            ),
             destination_mode
         );
         assert_eq!(

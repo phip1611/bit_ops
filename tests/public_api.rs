@@ -14,6 +14,28 @@ fn test_public_function_api() {
 }
 
 #[test]
+fn const_compatible() {
+    const fn compiles() {
+        use bitops_u64::*;
+        let _ = set_bit(0, 0);
+        let _ = clear_bit(0, 0);
+        let _ = is_set(0, 0);
+        let _ = toggle(0, 0);
+        let _ = set_bits(0, 0, 0, 0);
+        // let _ = set_bits_n(0, &[]);
+        let _ = set_bits_exact(0, 0, 0, 0);
+        // let _ = set_bits_exact_n(0, &[]);
+        let _ = clear_bits(0, 0);
+        let _ = highest_bit(0);
+        let _ = lowest_bit(0);
+        let _ = get_bits(0, 0, 0);
+        let _ = create_mask(0);
+        let _ = create_shifted_mask(0, 0);
+    }
+    compiles();
+}
+
+#[test]
 fn test_public_trait_api() {
     let raw = 0_u64.set_bits_exact(0b100, 3, 0);
     let raw = raw.set_bits_exact(0xf, 4, 60);

@@ -1,6 +1,6 @@
 # bit_ops
 
-Bitwise operations on primitive integer types, but no_std and const-compatible.
+Bitwise operations on primitive integer types, but `no_std` and `const`-compatible.
 Provides a collection of typical bit manipulation operations that are primarily
 required in low-level development. Unlike other crates that provide tooling to
 create sophisticated high-level types with bitfields, the focus of bit_ops is

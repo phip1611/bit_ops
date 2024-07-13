@@ -128,6 +128,7 @@ impl_trait!(u8);
 impl_trait!(u16);
 impl_trait!(u32);
 impl_trait!(u64);
+impl_trait!(u128);
 impl_trait!(usize);
 
 mod tests {}

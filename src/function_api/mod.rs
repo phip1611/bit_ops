@@ -23,7 +23,7 @@ SOFTWARE.
 */
 //! The function-oriented API of this crate, which is also the main
 //! functionality. For every relevant primitive type (`u8`, `u16`, `u32`, `u64`,
-//! `usize`), there is a module with typical bit operations as dedicated
+//! `u128`, `usize`), there is a module with typical bit operations as dedicated
 //! functions.
 //!
 //! This enables a smooth manual and direct approach to several bit-oriented
@@ -34,6 +34,7 @@ SOFTWARE.
 //! - [`bitops_u16`]
 //! - [`bitops_u32`]
 //! - [`bitops_u64`]
+//! - [`bitops_u128`]
 //! - [`bitops_usize`]
 
 #[macro_use]
@@ -43,6 +44,7 @@ impl_mod!(u8);
 impl_mod!(u16);
 impl_mod!(u32);
 impl_mod!(u64);
+impl_mod!(u128);
 impl_mod!(usize);
 
 #[cfg(test)]

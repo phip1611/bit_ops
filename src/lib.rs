@@ -25,14 +25,10 @@ SOFTWARE.
 //!
 //! ## About
 //!
-//! Bitwise operations on primitive integer types, but `no_std` and `const`-compatible.
-//! Provides a collection of typical bit manipulation operations that are primarily
-//! required in low-level development. Unlike other crates that provide tooling to
+//! Common bit-oriented operations on primitive integer types with a focus on
+//! `no_std` and `const` compatibility. Unlike other crates that provide tooling to
 //! create sophisticated high-level types with bitfields, the focus of `bit_ops` is
-//! to work on raw integers. Thus, this crate put focus on a manual and more
-//! direct approach.
-//!
-//!
+//! on raw primitive integer types.
 //! ## API
 //!
 //! This crate exports a Function API and a Trait API. The Function API is
@@ -55,6 +51,7 @@ SOFTWARE.
 //! - [`bitops_usize`]
 //!
 //! #### Example
+//!
 //! The following example shows a real-world scenario where several properties
 //! are encoded in a single `u64` representing an x86 IOAPIC redirection entry.
 //!

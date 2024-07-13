@@ -1,14 +1,12 @@
 [package]
 name = "bit_ops"
 description = """
-Bitwise operations on primitive integer types, but no_std and const-compatible.
-Provides a collection of typical bit manipulation operations that are primarily
-required in low-level development. Unlike other crates that provide tooling to
-create sophisticated high-level types with bitfields, the focus of bit_ops is
-to work on raw integers. Thus, this crate put focus on a manual and more direct
-approach.
+Common bit-oriented operations on primitive integer types with a focus on
+`no_std` and `const` compatibility. Unlike other crates that provide tooling to
+create sophisticated high-level types with bitfields, the focus of `bit_ops` is
+on raw primitive integer types.
 """
-version = "0.1.2"
+version = "0.1.3"
 edition = "2021"
 authors = [
   "Philipp Schuster <phip1611@gmail.com>"

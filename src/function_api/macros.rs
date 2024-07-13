@@ -417,7 +417,7 @@ macro_rules! impl_mod {
     ($primitive_ty:ty) => {
         paste::paste! {
             /// Various bit manipulation operations for the primitive type
-            #[doc = concat!("[", stringify!($primitive_ty), "].")]
+            #[doc = concat!("[`", stringify!($primitive_ty), "`].")]
             ///
             /// All functions are non-mutating but produce a new value.
             pub mod [< bitops _ $primitive_ty >]  {

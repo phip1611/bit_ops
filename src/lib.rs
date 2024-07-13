@@ -28,8 +28,9 @@ SOFTWARE.
 //! Bitwise operations on primitive integer types, but `no_std` and `const`-compatible.
 //! Provides a collection of typical bit manipulation operations that are primarily
 //! required in low-level development. Unlike other crates that provide tooling to
-//! create sophisticated high-level types with bitfields, the focus of bit-ops is
-//! to work on raw integers. Thus, bit-ops chose a manual and more direct approach.
+//! create sophisticated high-level types with bitfields, the focus of `bit_ops` is
+//! to work on raw integers. Thus, this crate put focus on a manual and more
+//! direct approach.
 //!
 //!
 //! ## API
@@ -37,8 +38,9 @@ SOFTWARE.
 //! This crate exports a Function API and a Trait API. The Function API is
 //! the foundation and provides `no_std` and `const`-compatible functions. The
 //! Trait API won't be `const`-compatible unless `const` trait methods are
-//! supported. This is not the case in Mid-2024 and the upcoming months in
-//! Rust stable.
+//! supported by Rust (stable). This is not the case in Mid-2024 and the
+//! next months in Rust stable. This crate will adapt, as soon as this
+//! changes.
 //!
 //! ### Function API
 //!
@@ -49,6 +51,7 @@ SOFTWARE.
 //! - [`bitops_u16`]
 //! - [`bitops_u32`]
 //! - [`bitops_u64`]
+//! - [`bitops_u128`]
 //! - [`bitops_usize`]
 //!
 //! #### Example
@@ -105,7 +108,7 @@ SOFTWARE.
 //!
 //! The trait [`BitOps`] is implemented for `u8`, `u16`, `u32`, `u64`, and
 //! `usize`. It provides the same functionality as the function API, but you
-//! call each function as associated function.
+//! call each bit operation as associated function.
 //!
 //! #### Example
 //! Unlike in the Function API, you can use chaining here:

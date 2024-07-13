@@ -50,6 +50,7 @@ macro_rules! impl_bit_ops {
         /// The bit position starts at `0`.
         ///
         /// # Example
+        ///
         /// ```rust
         #[doc = concat!("use bit_ops::bitops_", stringify!($primitive_ty), "::set_bit;")]
         ///
@@ -72,6 +73,7 @@ macro_rules! impl_bit_ops {
         /// The bit position starts at `0`.
         ///
         /// # Example
+        ///
         /// ```rust
         #[doc = concat!("use bit_ops::bitops_", stringify!($primitive_ty), "::clear_bit;")]
         ///
@@ -80,6 +82,7 @@ macro_rules! impl_bit_ops {
         /// ```
         ///
         /// # Panics
+        ///
         /// This function panics for bit positions that are outside the range of
         /// the underlying type.
         #[must_use]
@@ -95,6 +98,7 @@ macro_rules! impl_bit_ops {
         /// The bit position starts at `0`.
         ///
         /// # Example
+        ///
         /// ```rust
         #[doc = concat!("use bit_ops::bitops_", stringify!($primitive_ty), "::is_set;")]
         ///
@@ -118,6 +122,7 @@ macro_rules! impl_bit_ops {
         /// The bit position starts at `0`.
         ///
         /// # Example
+        ///
         /// ```rust
         #[doc = concat!("use bit_ops::bitops_", stringify!($primitive_ty), "::toggle;")]
         ///
@@ -144,12 +149,14 @@ macro_rules! impl_bit_ops {
         /// Sets the bits of `value` in `base` without clearing already set bits.
         ///
         /// # Parameters
+        ///
         /// - `base`: Base value to set bits in.
         /// - `value`: New value/bits to be set in `base`, but unshifted.
         /// - `value_bits`: Amount of bits of `value` that are relevant, starting from the right.
         /// - `value_shit`: Position of `value` inside `base`.
         ///
         /// # Example
+        ///
         /// ```rust
         #[doc = concat!("use bit_ops::bitops_", stringify!($primitive_ty), "::set_bits;")]
         ///
@@ -193,10 +200,12 @@ macro_rules! impl_bit_ops {
         /// inner loop.
         ///
         /// # Parameters
+        ///
         /// - `base`: Base value to set bits in.
         /// - `ops`: Tuple of (`value`, `value_bits`, `value_shift`)
         ///
         /// # Example
+        ///
         /// ```rust
         #[doc = concat!("use bit_ops::bitops_", stringify!($primitive_ty), "::set_bits_n;")]
         ///
@@ -271,10 +280,12 @@ macro_rules! impl_bit_ops {
         /// Clears all bits specified in the mask by setting them to `0`.
         ///
         /// # Parameters
+        ///
         /// - `base`: Base value to set bits in.
         /// - `clear_mask`: Bitmask with bits to clear.
         ///
         /// # Example
+        ///
         /// ```rust
         #[doc = concat!("use bit_ops::bitops_", stringify!($primitive_ty), "::clear_bits;")]
         ///
@@ -291,6 +302,7 @@ macro_rules! impl_bit_ops {
         /// The bit position starts at `0`.
         ///
         /// # Example
+        ///
         /// ```rust
         #[doc = concat!("use bit_ops::bitops_", stringify!($primitive_ty), "::highest_bit;")]
         ///
@@ -314,6 +326,7 @@ macro_rules! impl_bit_ops {
         /// The bit position starts at `0`.
         ///
         /// # Example
+        ///
         /// ```rust
         #[doc = concat!("use bit_ops::bitops_", stringify!($primitive_ty), "::lowest_bit;")]
         ///
@@ -335,12 +348,14 @@ macro_rules! impl_bit_ops {
         /// Get the requested bits as new integer.
         ///
         /// # Parameters
+        ///
         /// - `base`: Base value to get a specific set of bits from.
         /// - `value_bits`: Amount of bits of `value` that are relevant, starting
         ///                 from the right.
         /// - `value_shit`: Position of `value` inside `self`.
         ///
         /// # Panics
+        ///
         /// This function panics for overflowing shifts and bit positions that
         /// are outside the range of the underlying type.
         #[must_use]
@@ -358,6 +373,7 @@ macro_rules! impl_bit_ops {
         /// Creates a bitmask (`1`s) with the given amount of bits.
         ///
         /// # Example
+        ///
         /// ```rust
         #[doc = concat!("use bit_ops::bitops_", stringify!($primitive_ty), "::create_mask;")]
         ///
@@ -367,6 +383,7 @@ macro_rules! impl_bit_ops {
         /// ```
         ///
         /// # Panics
+        ///
         /// This function panics for bit positions that are outside the range
         /// of the underlying type.
         #[must_use]
@@ -388,6 +405,7 @@ macro_rules! impl_bit_ops {
         /// Like [`create_mask`] but shifts the mask.
         ///
         /// # Example
+        ///
         /// ```rust
         #[doc = concat!("use bit_ops::bitops_", stringify!($primitive_ty), "::create_shifted_mask;")]
         ///
@@ -397,6 +415,7 @@ macro_rules! impl_bit_ops {
         /// ```
         ///
         /// # Panics
+        ///
         /// This function panics for overflowing shifts and bit positions that
         /// are outside the range of the underlying type.
         #[must_use]
@@ -412,7 +431,6 @@ macro_rules! impl_bit_ops {
 }
 
 /// Implements the module wrapping the corresponding [`impl_bit_ops`] code.
-// #[macro_export]
 macro_rules! impl_mod {
     ($primitive_ty:ty) => {
         paste::paste! {

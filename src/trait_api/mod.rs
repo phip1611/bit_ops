@@ -44,6 +44,12 @@ pub trait BitOps: Copy + Sized {
     #[must_use]
     fn is_set(self, bit: Self) -> bool;
 
+    /// Returns the integer value of the given bit (`0` or `1`).
+    ///
+    /// The bit position starts at `0`.
+    #[must_use]
+    fn get_bit(self, bit: Self) -> Self;
+
     /// Toggles (flips) the given bit.
     ///
     /// The bit position starts at `0`.

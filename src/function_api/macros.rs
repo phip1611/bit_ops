@@ -113,8 +113,31 @@ macro_rules! impl_bit_ops {
         #[must_use]
         #[inline]
         pub const fn is_set(val: $primitive_ty, bit: $primitive_ty) -> bool {
+            get_bit(val, bit) == 1
+        }
+
+        /// Returns the integer value of the given bit (`0` or `1`).
+        ///
+        /// The bit position starts at `0`.
+        ///
+        /// # Example
+        ///
+        /// ```rust
+        #[doc = concat!("use bit_ops::bitops_", stringify!($primitive_ty), "::get_bit;")]
+        ///
+        /// assert_eq!(get_bit(0, 0), 0);
+        /// assert_eq!(get_bit(2, 0), 0);
+        /// assert_eq!(get_bit(2, 1), 1);
+        /// ```
+        ///
+        /// # Panics
+        /// This function panics for bit positions that are outside the range of
+        /// the underlying type.
+        #[must_use]
+        #[inline]
+        pub const fn get_bit(val: $primitive_ty, bit: $primitive_ty) -> $primitive_ty  {
             assert_in_range(bit, false);
-            ((val >> bit) & 1) == 1
+            (val >> bit) & 1
         }
 
         /// Toggles (flips) the given bit.

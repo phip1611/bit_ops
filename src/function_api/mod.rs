@@ -96,6 +96,20 @@ mod tests {
     }
 
     #[test]
+    fn get_bit() {
+        assert_eq!(bitops_u8::get_bit(0, 0), 0);
+        assert_eq!(bitops_u8::get_bit(1, 0), 1);
+        assert_eq!(bitops_u8::get_bit(u8::MAX, 0), 1);
+        assert_eq!(bitops_u8::get_bit(u8::MAX, 7), 1);
+        assert_eq!(bitops_u8::get_bit(1 << 6, 7), 0);
+
+        assert_eq!(bitops_u64::get_bit(0, 0), 0);
+        assert_eq!(bitops_u64::get_bit(1, 0), 1);
+        assert_eq!(bitops_u64::get_bit(u64::MAX, 0), 1);
+        assert_eq!(bitops_u64::get_bit(u64::MAX, 7), 1);
+    }
+
+    #[test]
     fn toggle() {
         assert!(bitops_u8::is_set(bitops_u8::toggle(0, 0), 0));
         assert!(!bitops_u8::is_set(bitops_u8::toggle(1, 0), 0));

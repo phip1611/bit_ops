@@ -62,6 +62,18 @@ macro_rules! impl_trait {
                 }
             }
 
+            #[doc = concat!("Wrapper around [`bitops_", stringify!($primitive_ty), "::get_bit`],")]
+            #[doc = concat!("but as associated function (method) on `", stringify!($primitive_ty), "`.")]
+            #[doc = ""] // newline needed so that markdown links work
+            #[doc = concat!("[`bitops_", stringify!($primitive_ty), "::get_bit`]: crate::bitops_", stringify!($primitive_ty), "::get_bit")]
+            #[inline]
+            #[must_use]
+            fn get_bit(self, bit: Self) -> Self {
+                paste::paste! {
+                    $crate::[< bitops _ $primitive_ty >]::get_bit(self, bit)
+                }
+            }
+
             #[doc = concat!("Wrapper around [`bitops_", stringify!($primitive_ty), "::toggle`],")]
             #[doc = concat!("but as associated function (method) on `", stringify!($primitive_ty), "`.")]
             #[doc = ""] // newline needed so that markdown links work

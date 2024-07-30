@@ -135,7 +135,7 @@ macro_rules! impl_bit_ops {
         /// the underlying type.
         #[must_use]
         #[inline]
-        pub const fn get_bit(val: $primitive_ty, bit: $primitive_ty) -> $primitive_ty  {
+        pub const fn get_bit(val: $primitive_ty, bit: $primitive_ty) -> $primitive_ty {
             assert_in_range(bit, false);
             (val >> bit) & 1
         }
@@ -193,7 +193,7 @@ macro_rules! impl_bit_ops {
         pub const fn toggle_bits(
             value: $primitive_ty,
             bits: $primitive_ty,
-            shift: $primitive_ty
+            shift: $primitive_ty,
         ) -> $primitive_ty {
             assert_in_range(bits, true);
             assert_in_range(shift, true);
@@ -292,7 +292,11 @@ macro_rules! impl_bit_ops {
         // TODO make const as soon as for-loops can be in const fn
         pub fn set_bits_n(
             base: $primitive_ty,
-            ops: &[($primitive_ty /* value */, $primitive_ty /* value_bits */, $primitive_ty /* value_shift */)],
+            ops: &[(
+                $primitive_ty, /* value */
+                $primitive_ty, /* value_bits */
+                $primitive_ty, /* value_shift */
+            )],
         ) -> $primitive_ty {
             let mut base = base;
             for op in ops {
@@ -325,7 +329,11 @@ macro_rules! impl_bit_ops {
         // TODO make const as soon as for-loops can be in const fn
         pub fn set_bits_exact_n(
             base: $primitive_ty,
-            ops: &[($primitive_ty /* value */, $primitive_ty /* value_bits */, $primitive_ty /* value_shift */)],
+            ops: &[(
+                $primitive_ty, /* value */
+                $primitive_ty, /* value_bits */
+                $primitive_ty, /* value_shift */
+            )],
         ) -> $primitive_ty {
             let mut base = base;
             for op in ops {
@@ -421,12 +429,11 @@ macro_rules! impl_bit_ops {
         pub const fn get_bits(
             base: $primitive_ty,
             value_bits: $primitive_ty,
-            value_shift: $primitive_ty
+            value_shift: $primitive_ty,
         ) -> $primitive_ty {
             let mask = create_mask(value_bits);
             (base >> value_shift) & mask
         }
-
 
         /// Creates a bitmask (`1`s) with the given amount of contiguous bits.
         ///
@@ -452,8 +459,7 @@ macro_rules! impl_bit_ops {
                 0
             } else if bits == BIT_COUNT {
                 <$primitive_ty>::MAX
-            }
-            else {
+            } else {
                 paste::paste! {
                     [< 1_ $primitive_ty >].wrapping_shl(bits as u32) - 1
                 }

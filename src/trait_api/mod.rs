@@ -54,7 +54,17 @@ pub trait BitOps: Copy + Sized {
     ///
     /// The bit position starts at `0`.
     #[must_use]
-    fn toggle(self, bit: Self) -> Self;
+    fn toggle_bit(self, bit: Self) -> Self;
+
+    /// Toggles (flips) the specified contiguous bits.
+    ///
+    /// # Parameters
+    ///
+    /// - `value`: Base value to alter.
+    /// - `bits`: Amount of bits of `value` that are relevant, starting from the right.
+    /// - `shift`: Relevant position of bits inside `value`, starting from the right.
+    #[must_use]
+    fn toggle_bits(self, bits: Self, shift: Self) -> Self;
 
     /// Sets the bits of `value` in `base` without clearing already set bits.
     ///
@@ -114,7 +124,7 @@ pub trait BitOps: Copy + Sized {
     #[must_use]
     fn lowest_bit(self) -> Option<Self>;
 
-    /// Get the requested bits as new integer.
+    /// Get the requested contiguous bits as new integer.
     ///
     /// # Parameters
     ///
@@ -124,13 +134,9 @@ pub trait BitOps: Copy + Sized {
     #[must_use]
     fn get_bits(self, value_bits: Self, value_shift: Self) -> Self;
 
-    /// Creates a bitmask (`1`s) with the given amount of bits.
+    /// Creates a bitmask (`1`s) with the given amount of contiguous bits .
     #[must_use]
     fn create_mask(bits: Self) -> Self;
-
-    /// Like [`Self::create_mask`] but shifts the mask.
-    #[must_use]
-    fn create_shifted_mask(bits: Self, lshift: Self) -> Self;
 }
 
 impl_trait!(u8);

@@ -110,16 +110,29 @@ mod tests {
     }
 
     #[test]
-    fn toggle() {
-        assert!(bitops_u8::is_set(bitops_u8::toggle(0, 0), 0));
-        assert!(!bitops_u8::is_set(bitops_u8::toggle(1, 0), 0));
-        assert_eq!(bitops_u8::toggle(3, 0), 0b10);
-        assert_eq!(bitops_u8::toggle(u8::MAX, 7), u8::MAX / 2);
+    fn toggle_bit() {
+        assert!(bitops_u8::is_set(bitops_u8::toggle_bit(0, 0), 0));
+        assert!(!bitops_u8::is_set(bitops_u8::toggle_bit(1, 0), 0));
+        assert_eq!(bitops_u8::toggle_bit(3, 0), 0b10);
+        assert_eq!(bitops_u8::toggle_bit(u8::MAX, 7), u8::MAX / 2);
 
-        assert!(bitops_u64::is_set(bitops_u64::toggle(0, 0), 0));
-        assert!(!bitops_u64::is_set(bitops_u64::toggle(1, 0), 0));
-        assert_eq!(bitops_u64::toggle(3, 0), 0b10);
-        assert_eq!(bitops_u64::toggle(u64::MAX, 63), u64::MAX / 2);
+        assert!(bitops_u64::is_set(bitops_u64::toggle_bit(0, 0), 0));
+        assert!(!bitops_u64::is_set(bitops_u64::toggle_bit(1, 0), 0));
+        assert_eq!(bitops_u64::toggle_bit(3, 0), 0b10);
+        assert_eq!(bitops_u64::toggle_bit(u64::MAX, 63), u64::MAX / 2);
+    }
+
+    #[test]
+    fn toggle_bits() {
+        assert_eq!(bitops_u8::toggle_bits(0, 0, 0), 0);
+        assert_eq!(bitops_u8::toggle_bits(1, 0, 0), 1);
+        assert_eq!(bitops_u8::toggle_bits(0b111, 2, 1), 1);
+        assert_eq!(bitops_u8::toggle_bits(0, 2, 1), 0b110);
+
+        assert_eq!(bitops_u64::toggle_bits(0, 0, 0), 0);
+        assert_eq!(bitops_u64::toggle_bits(1, 0, 0), 1);
+        assert_eq!(bitops_u64::toggle_bits(0b111, 2, 1), 1);
+        assert_eq!(bitops_u64::toggle_bits(u64::MAX, 62, 2), 0b11);
     }
 
     #[test]
@@ -217,16 +230,6 @@ mod tests {
 
         assert_eq!(bitops_u64::create_mask(0), 0);
         assert_eq!(bitops_u64::create_mask(64), u64::MAX);
-    }
-
-    #[test]
-    fn create_mask_shifted() {
-        assert_eq!(bitops_u8::create_shifted_mask(0, 5), 0);
-        assert_eq!(bitops_u8::create_shifted_mask(1, 5), 0b10_0000);
-        assert_eq!(bitops_u8::create_shifted_mask(2, 5), 0b110_0000);
-        assert_eq!(bitops_u8::create_shifted_mask(3, 5), 0b1110_0000);
-
-        assert_eq!(bitops_u64::create_shifted_mask(1, 63), u64::MAX / 2 + 1);
     }
 
     /// This tests various functions in combination using a real-world scenario.

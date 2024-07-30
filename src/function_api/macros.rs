@@ -135,7 +135,7 @@ macro_rules! impl_bit_ops {
         /// the underlying type.
         #[must_use]
         #[inline]
-        pub const fn get_bit(val: $primitive_ty, bit: $primitive_ty) -> $primitive_ty  {
+        pub const fn get_bit(val: $primitive_ty, bit: $primitive_ty) -> $primitive_ty {
             assert_in_range(bit, false);
             (val >> bit) & 1
         }
@@ -147,12 +147,12 @@ macro_rules! impl_bit_ops {
         /// # Example
         ///
         /// ```rust
-        #[doc = concat!("use bit_ops::bitops_", stringify!($primitive_ty), "::toggle;")]
+        #[doc = concat!("use bit_ops::bitops_", stringify!($primitive_ty), "::toggle_bit;")]
         ///
-        /// assert_eq!(toggle(0, 0), 1);
-        /// assert_eq!(toggle(0, 1), 2);
-        /// assert_eq!(toggle(0, 2), 4);
-        /// assert_eq!(toggle(0, 7), 128);
+        /// assert_eq!(toggle_bit(0, 0), 1);
+        /// assert_eq!(toggle_bit(0, 1), 2);
+        /// assert_eq!(toggle_bit(0, 2), 4);
+        /// assert_eq!(toggle_bit(0, 7), 128);
         /// ```
         ///
         /// # Panics
@@ -160,23 +160,56 @@ macro_rules! impl_bit_ops {
         /// the underlying type.
         #[must_use]
         #[inline]
-        pub const fn toggle(val: $primitive_ty, bit: $primitive_ty) -> $primitive_ty {
-            assert_in_range(bit, false);
-            if is_set(val, bit) {
-                clear_bit(val, bit)
-            } else {
-                set_bit(val, bit)
-            }
+        pub const fn toggle_bit(val: $primitive_ty, bit: $primitive_ty) -> $primitive_ty {
+            toggle_bits(val, 1, bit)
         }
 
-        /// Sets the bits of `value` in `base` without clearing already set bits.
+        /// Toggles (flips) the specified contiguous bits.
+        ///
+        /// # Parameters
+        ///
+        /// - `value`: Base value to alter.
+        /// - `bits`: Amount of bits of `value` that are relevant, starting from the right.
+        /// - `shift`: Relevant position of bits inside `value`, starting from the right.
+        ///
+        /// # Example
+        ///
+        /// ```rust
+        #[doc = concat!("use bit_ops::bitops_", stringify!($primitive_ty), "::toggle_bits;")]
+        ///
+        /// assert_eq!(toggle_bits(0, 1, 0), 1);
+        /// assert_eq!(toggle_bits(0, 1, 1), 2);
+        /// assert_eq!(toggle_bits(0, 1, 2), 4);
+        /// assert_eq!(toggle_bits(0, 1, 7), 128);
+        /// assert_eq!(toggle_bits(1, 2, 1), 0b111);
+        /// assert_eq!(toggle_bits(0b1000_0100, 4, 2), 0b1011_1000);
+        /// ```
+        ///
+        /// # Panics
+        /// This function panics for overflowing shifts and bit positions that
+        /// are outside the range of the underlying type.
+        #[must_use]
+        #[inline]
+        pub const fn toggle_bits(
+            value: $primitive_ty,
+            bits: $primitive_ty,
+            shift: $primitive_ty,
+        ) -> $primitive_ty {
+            assert_in_range(bits, true);
+            assert_in_range(shift, true);
+            let mask = create_mask(bits) << shift;
+            value ^ mask
+        }
+
+        /// Sets the bits of `value` in `base` without clearing already set
+        /// bits.
         ///
         /// # Parameters
         ///
         /// - `base`: Base value to set bits in.
         /// - `value`: New value/bits to be set in `base`, but unshifted.
         /// - `value_bits`: Amount of bits of `value` that are relevant, starting from the right.
-        /// - `value_shit`: Position of `value` inside `base`.
+        /// - `value_shit`: Position of `value` inside `base`, starting from the right.
         ///
         /// # Example
         ///
@@ -259,7 +292,11 @@ macro_rules! impl_bit_ops {
         // TODO make const as soon as for-loops can be in const fn
         pub fn set_bits_n(
             base: $primitive_ty,
-            ops: &[($primitive_ty /* value */, $primitive_ty /* value_bits */, $primitive_ty /* value_shift */)],
+            ops: &[(
+                $primitive_ty, /* value */
+                $primitive_ty, /* value_bits */
+                $primitive_ty, /* value_shift */
+            )],
         ) -> $primitive_ty {
             let mut base = base;
             for op in ops {
@@ -289,9 +326,14 @@ macro_rules! impl_bit_ops {
         /// inner loop.
         #[must_use]
         #[inline]
+        // TODO make const as soon as for-loops can be in const fn
         pub fn set_bits_exact_n(
             base: $primitive_ty,
-            ops: &[($primitive_ty /* value */, $primitive_ty /* value_bits */, $primitive_ty /* value_shift */)],
+            ops: &[(
+                $primitive_ty, /* value */
+                $primitive_ty, /* value_bits */
+                $primitive_ty, /* value_shift */
+            )],
         ) -> $primitive_ty {
             let mut base = base;
             for op in ops {
@@ -339,7 +381,8 @@ macro_rules! impl_bit_ops {
             if val == 0 {
                 None
             } else {
-                let bit = BIT_COUNT - (val.leading_zeros() as $primitive_ty) - 1;
+                let max_pos = BIT_COUNT - 1;
+                let bit = max_pos - (val.leading_zeros() as $primitive_ty);
                 Some(bit)
             }
         }
@@ -368,7 +411,7 @@ macro_rules! impl_bit_ops {
             }
         }
 
-        /// Get the requested bits as new integer.
+        /// Get the requested contiguous bits as new integer.
         ///
         /// # Parameters
         ///
@@ -386,14 +429,13 @@ macro_rules! impl_bit_ops {
         pub const fn get_bits(
             base: $primitive_ty,
             value_bits: $primitive_ty,
-            value_shift: $primitive_ty
+            value_shift: $primitive_ty,
         ) -> $primitive_ty {
             let mask = create_mask(value_bits);
             (base >> value_shift) & mask
         }
 
-
-        /// Creates a bitmask (`1`s) with the given amount of bits.
+        /// Creates a bitmask (`1`s) with the given amount of contiguous bits.
         ///
         /// # Example
         ///
@@ -417,38 +459,11 @@ macro_rules! impl_bit_ops {
                 0
             } else if bits == BIT_COUNT {
                 <$primitive_ty>::MAX
-            }
-            else {
+            } else {
                 paste::paste! {
                     [< 1_ $primitive_ty >].wrapping_shl(bits as u32) - 1
                 }
             }
-        }
-
-        /// Like [`create_mask`] but shifts the mask.
-        ///
-        /// # Example
-        ///
-        /// ```rust
-        #[doc = concat!("use bit_ops::bitops_", stringify!($primitive_ty), "::create_shifted_mask;")]
-        ///
-        /// assert_eq!(create_shifted_mask(0, 3), 0);
-        /// assert_eq!(create_shifted_mask(1, 3), 0b1000);
-        /// assert_eq!(create_shifted_mask(3, 2), 0b11100);
-        /// ```
-        ///
-        /// # Panics
-        ///
-        /// This function panics for overflowing shifts and bit positions that
-        /// are outside the range of the underlying type.
-        #[must_use]
-        #[inline]
-        pub const fn create_shifted_mask(
-            bits: $primitive_ty,
-            lshift: $primitive_ty,
-        ) -> $primitive_ty {
-            assert_in_range(bits, true);
-            create_mask(bits) << lshift
         }
     };
 }

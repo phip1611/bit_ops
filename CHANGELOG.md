@@ -1,5 +1,11 @@
 # Unreleased
 
+# v0.1.9 - 2024-07-30
+
+- Removed `create_shifted_mask` as `create_mask() << 5` is a trivial replacement
+- Renamed `toggle` to `toggle_bit`
+- Added `toggle_bits`
+
 # v0.1.8 - 2024-07-15
 
 - Added `get_bit` function that is like `is_set` but returns an integer instead

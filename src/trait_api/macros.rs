@@ -74,15 +74,27 @@ macro_rules! impl_trait {
                 }
             }
 
-            #[doc = concat!("Wrapper around [`bitops_", stringify!($primitive_ty), "::toggle`],")]
+            #[doc = concat!("Wrapper around [`bitops_", stringify!($primitive_ty), "::toggle_bit`],")]
             #[doc = concat!("but as associated function (method) on `", stringify!($primitive_ty), "`.")]
             #[doc = ""] // newline needed so that markdown links work
-            #[doc = concat!("[`bitops_", stringify!($primitive_ty), "::toggle`]: crate::bitops_", stringify!($primitive_ty), "::toggle")]
+            #[doc = concat!("[`bitops_", stringify!($primitive_ty), "::toggle_bit`]: crate::bitops_", stringify!($primitive_ty), "::toggle_bit")]
             #[inline]
             #[must_use]
-            fn toggle(self, bit: Self) -> Self {
+            fn toggle_bit(self, bit: Self) -> Self {
                 paste::paste! {
-                    $crate::[< bitops _ $primitive_ty >]::toggle(self, bit)
+                    $crate::[< bitops _ $primitive_ty >]::toggle_bit(self, bit)
+                }
+            }
+
+            #[doc = concat!("Wrapper around [`bitops_", stringify!($primitive_ty), "::toggle_bits`],")]
+            #[doc = concat!("but as associated function (method) on `", stringify!($primitive_ty), "`.")]
+            #[doc = ""] // newline needed so that markdown links work
+            #[doc = concat!("[`bitops_", stringify!($primitive_ty), "::toggle_bits`]: crate::bitops_", stringify!($primitive_ty), "::toggle_bits")]
+            #[inline]
+            #[must_use]
+            fn toggle_bits(self, bits: Self, shift: Self) -> Self {
+                paste::paste! {
+                    $crate::[< bitops _ $primitive_ty >]::toggle_bits(self, bits, shift)
                 }
             }
 
@@ -191,18 +203,6 @@ macro_rules! impl_trait {
             fn create_mask(bits: Self) -> Self {
                 paste::paste! {
                     $crate::[< bitops _ $primitive_ty >]::create_mask(bits)
-                }
-            }
-
-            #[doc = concat!("Wrapper around [`bitops_", stringify!($primitive_ty), "::create_shifted_mask`],")]
-            #[doc = concat!("but as associated function (method) on `", stringify!($primitive_ty), "`.")]
-            #[doc = ""] // newline needed so that markdown links work
-            #[doc = concat!("[`bitops_", stringify!($primitive_ty), "::create_shifted_mask`]: crate::bitops_", stringify!($primitive_ty), "::create_shifted_mask")]
-            #[inline]
-            #[must_use]
-            fn create_shifted_mask(bits: Self, lshift: Self) -> Self {
-                paste::paste! {
-                    $crate::[< bitops _ $primitive_ty >]::create_shifted_mask(bits, lshift)
                 }
             }
         }

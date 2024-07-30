@@ -20,7 +20,8 @@ fn const_compatible() {
         let _ = set_bit(0, 0);
         let _ = clear_bit(0, 0);
         let _ = is_set(0, 0);
-        let _ = toggle(0, 0);
+        let _ = toggle_bit(0, 0);
+        let _ = toggle_bits(0, 0, 0);
         let _ = set_bits(0, 0, 0, 0);
         // let _ = set_bits_n(0, &[]);
         let _ = set_bits_exact(0, 0, 0, 0);
@@ -30,7 +31,6 @@ fn const_compatible() {
         let _ = lowest_bit(0);
         let _ = get_bits(0, 0, 0);
         let _ = create_mask(0);
-        let _ = create_shifted_mask(0, 0);
     }
     compiles();
 }

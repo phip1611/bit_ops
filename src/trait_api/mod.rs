@@ -134,7 +134,7 @@ pub trait BitOps: Copy + Sized {
     #[must_use]
     fn get_bits(self, value_bits: Self, value_shift: Self) -> Self;
 
-    /// Creates a bitmask (`1`s) with the given amount of contiguous bits .
+    /// Creates a bitmask (`1`s) with the given amount of contiguous bits.
     #[must_use]
     fn create_mask(bits: Self) -> Self;
 }
@@ -145,5 +145,3 @@ impl_trait!(u32);
 impl_trait!(u64);
 impl_trait!(u128);
 impl_trait!(usize);
-
-mod tests {}

@@ -1,6 +1,6 @@
 # Unreleased
 
-# v0.1.9 - 2024-07-30
+# v0.1.9, v0.1.10  - 2024-07-30
 
 - Removed `create_shifted_mask` as `create_mask() << 5` is a trivial replacement
 - Renamed `toggle` to `toggle_bit`

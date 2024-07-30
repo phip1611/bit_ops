@@ -23,9 +23,9 @@ fn const_compatible() {
         let _ = toggle_bit(0, 0);
         let _ = toggle_bits(0, 0, 0);
         let _ = set_bits(0, 0, 0, 0);
-        // let _ = set_bits_n(0, &[]);
+        let _ = set_bits_n(0, &[]);
         let _ = set_bits_exact(0, 0, 0, 0);
-        // let _ = set_bits_exact_n(0, &[]);
+        let _ = set_bits_exact_n(0, &[]);
         let _ = clear_bits(0, 0);
         let _ = highest_bit(0);
         let _ = lowest_bit(0);

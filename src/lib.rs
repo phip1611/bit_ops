@@ -36,8 +36,13 @@ SOFTWARE.
 //! the foundation and provides `no_std` and `const`-compatible functions. The
 //! Trait API won't be `const`-compatible unless `const` trait methods are
 //! supported by Rust (stable). This is not the case in Mid-2024 and the
-//! next months in Rust stable. This crate will adapt, as soon as this
+//! next months in Rust stable. `bit_ops` will adapt, as soon as this
 //! changes.
+//!
+//! Note that the most trivial operations, such as `"shift_bits"` or
+//! `"keep_bits"` won't be covered by the API, as they would be a convoluted way
+//! around the standard operators `<<`, `>>`, and `&`. Only non-trivial
+//! non-oneliners are covered by the API.
 //!
 //! ### Function API
 //!

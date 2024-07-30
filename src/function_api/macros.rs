@@ -252,9 +252,6 @@ macro_rules! impl_bit_ops {
         /// Version of [`set_bits`] that applies a list of multiple values to
         /// the base.
         ///
-        /// This function, unlike the others, is not `const` yet due to the
-        /// inner loop.
-        ///
         /// # Parameters
         ///
         /// - `base`: Base value to set bits in.
@@ -289,8 +286,7 @@ macro_rules! impl_bit_ops {
         /// are outside the range of the underlying type.
         #[must_use]
         #[inline]
-        // TODO make const as soon as for-loops can be in const fn
-        pub fn set_bits_n(
+        pub const fn set_bits_n(
             base: $primitive_ty,
             ops: &[(
                 $primitive_ty, /* value */
@@ -299,8 +295,11 @@ macro_rules! impl_bit_ops {
             )],
         ) -> $primitive_ty {
             let mut base = base;
-            for op in ops {
+            let mut i = 0;
+            while i < ops.len() {
+                let op = ops[i];
                 base = set_bits(base, op.0, op.1, op.2);
+                i += 1;
             }
             base
         }
@@ -321,13 +320,9 @@ macro_rules! impl_bit_ops {
         }
 
         /// Combination of [`set_bits_exact`] and [`set_bits_n`].
-        ///
-        /// This function, unlike the others, is not `const` yet due to the
-        /// inner loop.
         #[must_use]
         #[inline]
-        // TODO make const as soon as for-loops can be in const fn
-        pub fn set_bits_exact_n(
+        pub const fn set_bits_exact_n(
             base: $primitive_ty,
             ops: &[(
                 $primitive_ty, /* value */
@@ -336,8 +331,11 @@ macro_rules! impl_bit_ops {
             )],
         ) -> $primitive_ty {
             let mut base = base;
-            for op in ops {
+            let mut i = 0;
+            while i < ops.len() {
+                let op = ops[i];
                 base = set_bits_exact(base, op.0, op.1, op.2);
+                i += 1;
             }
             base
         }

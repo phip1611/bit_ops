@@ -56,4 +56,9 @@ fn main() {
 
 ## MSRV
 
+<!-- Keep in sync with lib.rs and Cargo.toml!  -->
 1.57.0 stable
+
+## License
+
+MIT License. See [LICENSE](./LICENSE) file.

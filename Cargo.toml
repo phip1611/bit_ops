@@ -6,7 +6,7 @@ Common bit-oriented operations on primitive integer types with a focus on
 create sophisticated high-level types with bitfields, the focus of `bit_ops` is
 on raw primitive integer types.
 """
-version = "0.1.8"
+version = "0.1.9"
 edition = "2021"
 authors = [
   "Philipp Schuster <phip1611@gmail.com>"

@@ -39,10 +39,12 @@ SOFTWARE.
 //! next months in Rust stable. `bit_ops` will adapt, as soon as this
 //! changes.
 //!
-//! Note that the most trivial operations, such as `"shift_bits"` or
-//! `"keep_bits"` won't be covered by the API, as they would be a convoluted way
-//! around the standard operators `<<`, `>>`, and `&`. Only non-trivial
-//! non-oneliners are covered by the API.
+//! Note that the most trivial bit operations, such as `"shift_bits"` or
+//! `"keep_bits"` won't be covered by the API, as this would introduce a
+//! convoluted way around the standard operators `<<`, `>>`, and `&`. Only
+//! non-trivial non-oneliners are covered by the API as well as operations,
+//! where the semantic name provides a value-add over a (possible even oneliner)
+//! (combination of) bit operation.
 //!
 //! ### Function API
 //!
@@ -117,6 +119,14 @@ SOFTWARE.
 //! let raw = 0_u64.set_bit(1).set_bit(2);
 //! assert_eq!(raw, 0b110);
 //! ```
+//!
+//! ## MSRV
+//!
+//! 1.57.0 stable
+//!
+//! ## License
+//!
+//! MIT License.
 
 #![deny(
     clippy::all,

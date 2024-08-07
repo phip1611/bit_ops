@@ -21,6 +21,31 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
+
+#![deny(
+    clippy::all,
+    clippy::cargo,
+    clippy::nursery,
+    clippy::must_use_candidate,
+    // clippy::restriction,
+    // clippy::pedantic
+)]
+// now allow a few rules which are denied by the above statement
+// --> they are ridiculous and not necessary
+#![allow(
+    clippy::suboptimal_flops,
+    clippy::redundant_pub_crate,
+    clippy::fallible_impl_from
+)]
+// I can't do anything about this; fault of the dependencies
+#![allow(clippy::multiple_crate_versions)]
+// allow: required because of derive macro.. :(
+#![allow(clippy::use_self)]
+#![deny(missing_docs)]
+#![deny(missing_debug_implementations)]
+#![deny(rustdoc::all)]
+#![no_std]
+
 //! # bit_ops
 //!
 //! ## About
@@ -127,29 +152,6 @@ SOFTWARE.
 //! ## License
 //!
 //! MIT License.
-
-#![deny(
-    clippy::all,
-    clippy::cargo,
-    clippy::nursery,
-    clippy::must_use_candidate,
-    // clippy::restriction,
-    // clippy::pedantic
-)]
-// now allow a few rules which are denied by the above statement
-// --> they are ridiculous and not necessary
-#![allow(
-    clippy::suboptimal_flops,
-    clippy::redundant_pub_crate,
-    clippy::fallible_impl_from
-)]
-// I can't do anything about this; fault of the dependencies
-#![allow(clippy::multiple_crate_versions)]
-// allow: required because of derive macro.. :(
-#![allow(clippy::use_self)]
-#![deny(missing_docs)]
-#![deny(missing_debug_implementations)]
-#![deny(rustdoc::all)]
 
 mod function_api;
 mod trait_api;

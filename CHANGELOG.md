@@ -1,5 +1,11 @@
 # Unreleased
 
+# v0.1.12 - 2024-08-07
+
+- Added the `#![no_std]` attribute to the crate. During early development, I
+  probably removed this for easier debugging and then this embarrassing mistake
+  happened.. 🤦😅  Now the crate is really `no_std` - as promised!
+
 # v0.1.11 - 2024-07-30
 
 - Functions `set_bits_n` and `set_bits_exact_n` are now `const` compatible

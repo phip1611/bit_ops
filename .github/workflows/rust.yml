@@ -48,6 +48,11 @@ jobs:
         run: cargo check --verbose --release
       - name: cargo build (debug)
         run: cargo build --verbose
+      - name: cargo build (debug) [no_std]
+        run: |
+          # Picked some random no_std target
+          rustup target add thumbv7em-none-eabihf
+          cargo build --verbose --target thumbv7em-none-eabihf
       - name: cargo build (release)
         run: cargo build --verbose --release
       - run: cargo test --verbose

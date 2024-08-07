@@ -151,6 +151,8 @@ SOFTWARE.
 #![deny(missing_debug_implementations)]
 #![deny(rustdoc::all)]
 
+#![cfg_attr(feature = "no_std", no_std)]
+
 mod function_api;
 mod trait_api;
 

@@ -20,5 +20,8 @@ repository = "https://github.com/phip1611/bit_ops"
 documentation = "https://docs.rs/bit_ops"
 rust-version = "1.57" # MSRV
 
+[features]
+no_std = []
+
 [dependencies]
 paste = "1.0.15"

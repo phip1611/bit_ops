@@ -145,6 +145,12 @@ SOFTWARE.
 //! assert_eq!(raw, 0b110);
 //! ```
 //!
+//! ## Comparison to other Crates
+//!
+//! `bit_ops` (this crate) is fresher, more feature-complete, and fully `no_std`
+//! and `const` compatible compared to `bit_op`, `bitops`, and `bitwise`. Unlike
+//! in `bitwise` for example, functionality from `libcore` is not replicated.
+//!
 //! ## MSRV
 //!
 //! 1.57.0 stable
@@ -158,3 +164,4 @@ mod trait_api;
 
 pub use function_api::*;
 pub use trait_api::*;
+

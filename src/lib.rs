@@ -164,4 +164,3 @@ mod trait_api;
 
 pub use function_api::*;
 pub use trait_api::*;
-

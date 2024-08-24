@@ -1,5 +1,9 @@
 # Unreleased
 
+# v0.1.13 - 2024-08-24
+
+- Metadata changes
+
 # v0.1.12 - 2024-08-07
 
 - Added the `#![no_std]` attribute to the crate. During early development, I

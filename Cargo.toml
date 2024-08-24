@@ -6,13 +6,13 @@ Common bit-oriented operations on primitive integer types with a focus on
 create sophisticated high-level types with bitfields, the focus of `bit_ops` is
 on raw primitive integer types.
 """
-version = "0.1.12"
+version = "0.1.13"
 edition = "2021"
 authors = [
   "Philipp Schuster <phip1611@gmail.com>"
 ]
 keywords = ["bitwise", "bits"]
-categories = ["no-std", "data-structures", "encoding"]
+categories = ["no-std", "no-std::no-alloc", "data-structures", "encoding"]
 readme = "README.md"
 license = "MIT"
 homepage = "https://github.com/phip1611/bit_ops"

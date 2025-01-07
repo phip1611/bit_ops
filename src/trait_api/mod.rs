@@ -29,30 +29,50 @@ pub trait BitOps: Copy + Sized {
     /// Sets the given bit to `1`.
     ///
     /// The bit position starts at `0`.
+    ///
+    /// # Parameters
+    ///
+    /// - `bit`: Bit to set, starting at position `0`.
     #[must_use]
     fn set_bit(self, bit: Self) -> Self;
 
     /// Clears the given bit by setting it to `0`.
     ///
     /// The bit position starts at `0`.
+    ///
+    /// # Parameters
+    ///
+    /// - `bit`: Bit to clear, starting at position `0`.
     #[must_use]
     fn clear_bit(self, bit: Self) -> Self;
 
     /// Returns whether the given bit is set.
     ///
     /// The bit position starts at `0`.
+    ///
+    /// # Parameters
+    ///
+    /// - `bit`: Bit to check, starting at position `0`.
     #[must_use]
     fn is_set(self, bit: Self) -> bool;
 
     /// Returns the integer value of the given bit (`0` or `1`).
     ///
     /// The bit position starts at `0`.
+    ///
+    /// # Parameters
+    ///
+    /// - `bit`: Bit to get, starting at position `0`.
     #[must_use]
     fn get_bit(self, bit: Self) -> Self;
 
     /// Toggles (flips) the given bit.
     ///
     /// The bit position starts at `0`.
+    ///
+    /// # Parameters
+    ///
+    /// - `bit`: Bit to toggle, starting at position `0`.
     #[must_use]
     fn toggle_bit(self, bit: Self) -> Self;
 
@@ -60,19 +80,20 @@ pub trait BitOps: Copy + Sized {
     ///
     /// # Parameters
     ///
-    /// - `value`: Base value to alter.
     /// - `bits`: Amount of bits of `value` that are relevant.
-    /// - `shift`: Relevant position of bits inside `value`, starting from the right/LSB (`0`).
+    /// - `shift`: Relevant position of bits inside `value`, starting from the
+    ///            right/LSB (`0`).
     #[must_use]
     fn toggle_bits(self, bits: Self, shift: Self) -> Self;
 
-    /// Sets the bits of `value` in `base` without clearing already set bits.
+    /// Sets the bits of `value` in `self` without clearing already set bits.
     ///
     /// # Parameters
     ///
-    /// - `value`: New value/bits to be set in `base`, but unshifted.
+    /// - `value`: New value/bits to be set in `base`.
     /// - `value_bits`: Amount of bits of `value` that are relevant.
-    /// - `value_shift`: Position of `value` inside `self`, starting from the right/LSB (`0`).
+    /// - `value_shift`: Position of `value` inside `self`, starting from the
+    ///                  right/LSB (`0`).
     #[must_use]
     fn set_bits(self, value: Self, value_bits: Self, value_shift: Self) -> Self;
 
@@ -112,28 +133,33 @@ pub trait BitOps: Copy + Sized {
     #[must_use]
     fn clear_bits(self, clear_mask: Self) -> Self;
 
-    /// Returns the highest bit that is set.
+    /// Returns the highest bit that is set, if any.
     ///
     /// The bit position starts at `0`.
     #[must_use]
     fn highest_bit(self) -> Option<Self>;
 
-    /// Returns the lowest bit that is set.
+    /// Returns the lowest bit that is set, if any.
     ///
     /// The bit position starts at `0`.
     #[must_use]
     fn lowest_bit(self) -> Option<Self>;
 
-    /// Get the requested contiguous bits as new integer.
+    /// Returns the requested contiguous bits as new integer.
     ///
     /// # Parameters
     ///
     /// - `value_bits`: Amount of bits of `value` that are relevant.
-    /// - `value_shift`: Position of `value` inside `self`, starting from the right/LSB (`0`).
+    /// - `value_shift`: Position of `value` inside `self`, starting from the
+    ///                  right/LSB (`0`).
     #[must_use]
     fn get_bits(self, value_bits: Self, value_shift: Self) -> Self;
 
     /// Creates a bitmask (`1`s) with the given amount of contiguous bits.
+    ///
+    /// # Parameters
+    ///
+    /// - `bits`: Amount of contiguous bits.
     #[must_use]
     fn create_mask(bits: Self) -> Self;
 }

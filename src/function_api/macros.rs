@@ -49,6 +49,11 @@ macro_rules! impl_bit_ops {
         ///
         /// The bit position starts at `0`.
         ///
+        /// # Parameters
+        ///
+        /// - `base`: Base value to alter.
+        /// - `bit`: Bit to set, starting at position `0`.
+        ///
         /// # Example
         ///
         /// ```rust
@@ -63,14 +68,19 @@ macro_rules! impl_bit_ops {
         /// the underlying type.
         #[must_use]
         #[inline]
-        pub const fn set_bit(val: $primitive_ty, bit: $primitive_ty) -> $primitive_ty {
+        pub const fn set_bit(base: $primitive_ty, bit: $primitive_ty) -> $primitive_ty {
             assert_in_range(bit, false);
-            val | (1 << bit)
+            base | (1 << bit)
         }
 
         /// Clears the given bit by setting it to `0`.
         ///
         /// The bit position starts at `0`.
+        ///
+        /// # Parameters
+        ///
+        /// - `base`: Base value to alter.
+        /// - `bit`: Bit to clear, starting at position `0`.
         ///
         /// # Example
         ///
@@ -87,15 +97,20 @@ macro_rules! impl_bit_ops {
         /// the underlying type.
         #[must_use]
         #[inline]
-        pub const fn clear_bit(val: $primitive_ty, bit: $primitive_ty) -> $primitive_ty {
+        pub const fn clear_bit(base: $primitive_ty, bit: $primitive_ty) -> $primitive_ty {
             assert_in_range(bit, false);
             let negative_mask = !(1 << bit);
-            val & negative_mask
+            base & negative_mask
         }
 
         /// Returns whether the given bit is set.
         ///
         /// The bit position starts at `0`.
+        ///
+        /// # Parameters
+        ///
+        /// - `base`: Base value to alter.
+        /// - `bit`: Bit to check, starting at position `0`.
         ///
         /// # Example
         ///
@@ -112,11 +127,18 @@ macro_rules! impl_bit_ops {
         /// the underlying type.
         #[must_use]
         #[inline]
-        pub const fn is_set(val: $primitive_ty, bit: $primitive_ty) -> bool {
-            get_bit(val, bit) == 1
+        pub const fn is_set(base: $primitive_ty, bit: $primitive_ty) -> bool {
+            get_bit(base, bit) == 1
         }
 
         /// Returns the integer value of the given bit (`0` or `1`).
+        ///
+        /// The bit position starts at `0`.
+        ///
+        /// # Parameters
+        ///
+        /// - `base`: Base value to get a bit from.
+        /// - `bit`: Bit to get, starting at position `0`.
         ///
         /// The bit position starts at `0`.
         ///
@@ -135,14 +157,19 @@ macro_rules! impl_bit_ops {
         /// the underlying type.
         #[must_use]
         #[inline]
-        pub const fn get_bit(val: $primitive_ty, bit: $primitive_ty) -> $primitive_ty {
+        pub const fn get_bit(base: $primitive_ty, bit: $primitive_ty) -> $primitive_ty {
             assert_in_range(bit, false);
-            (val >> bit) & 1
+            (base >> bit) & 1
         }
 
         /// Toggles (flips) the given bit.
         ///
         /// The bit position starts at `0`.
+        ///
+        /// # Parameters
+        ///
+        /// - `base`: Base value to alter.
+        /// - `bit`: Bit to toggle, starting at position `0`.
         ///
         /// # Example
         ///
@@ -168,9 +195,10 @@ macro_rules! impl_bit_ops {
         ///
         /// # Parameters
         ///
-        /// - `value`: Base value to alter.
-        /// - `bits`: Amount of bits of `value` that are relevant.
-        /// - `shift`: Relevant position of bits inside `value`, starting from the right/LSB (`0`).
+        /// - `base`: Base value to alter.
+        /// - `bits`: Amount of bits of `base` that are relevant.
+        /// - `shift`: Relevant position of bits inside `base`, starting from
+        ///            the right/LSB (`0`).
         ///
         /// # Example
         ///
@@ -191,14 +219,14 @@ macro_rules! impl_bit_ops {
         #[must_use]
         #[inline]
         pub const fn toggle_bits(
-            value: $primitive_ty,
+            base: $primitive_ty,
             bits: $primitive_ty,
             shift: $primitive_ty,
         ) -> $primitive_ty {
             assert_in_range(bits, true);
             assert_in_range(shift, true);
             let mask = create_mask(bits) << shift;
-            value ^ mask
+            base ^ mask
         }
 
         /// Sets the bits of `value` in `base` without clearing already set
@@ -206,10 +234,11 @@ macro_rules! impl_bit_ops {
         ///
         /// # Parameters
         ///
-        /// - `base`: Base value to set bits in.
-        /// - `value`: New value/bits to be set in `base`, but unshifted.
+        /// - `base`: Base value to alter.
+        /// - `value`: New value/bits to be set in `base`.
         /// - `value_bits`: Amount of bits of `value` that are relevant.
-        /// - `value_shift`: Position of `value` inside `base`, starting from the right/LSB (`0`).
+        /// - `value_shift`: Position of `value` inside `base`, starting from
+        ///                  the right/LSB (`0`).
         ///
         /// # Example
         ///
@@ -238,9 +267,9 @@ macro_rules! impl_bit_ops {
         #[inline]
         pub const fn set_bits(
             base: $primitive_ty,
-            value: $primitive_ty,       /* unshifted new bits */
-            value_bits: $primitive_ty,  /* bits of value to use */
-            value_shift: $primitive_ty, /* bits to left-shift value before updating base  */
+            value: $primitive_ty,
+            value_bits: $primitive_ty,
+            value_shift: $primitive_ty,
         ) -> $primitive_ty {
             assert_in_range(value_bits, true);
             assert_in_range(value_shift, true);
@@ -254,8 +283,9 @@ macro_rules! impl_bit_ops {
         ///
         /// # Parameters
         ///
-        /// - `base`: Base value to set bits in.
-        /// - `ops`: Tuple of (`value`, `value_bits`, `value_shift`)
+        /// - `base`: Base value to alter.
+        /// - `ops`: Tuple of (`value`, `value_bits`, `value_shift`) where each
+        ///   tuple member corresponds to the parameter in [`set_bits_n`].
         ///
         /// # Example
         ///
@@ -304,8 +334,8 @@ macro_rules! impl_bit_ops {
             base
         }
 
-        /// Like [`set_bits`] but calls [`clear_bits`] beforehand for
-        /// the relevant bits.
+        /// Like [`set_bits`] but calls [`clear_bits`] beforehand for the
+        /// relevant bits.
         #[must_use]
         #[inline]
         pub const fn set_bits_exact(
@@ -344,7 +374,7 @@ macro_rules! impl_bit_ops {
         ///
         /// # Parameters
         ///
-        /// - `base`: Base value to set bits in.
+        /// - `base`: Base value to alter.
         /// - `clear_mask`: Bitmask with bits to clear.
         ///
         /// # Example
@@ -360,9 +390,13 @@ macro_rules! impl_bit_ops {
             base & !clear_mask
         }
 
-        /// Returns the highest bit that is set.
+        /// Returns the highest bit that is set, if any.
         ///
         /// The bit position starts at `0`.
+        ///
+        /// # Parameters
+        ///
+        /// - `base`: Base value to get highest bit from.
         ///
         /// # Example
         ///
@@ -375,19 +409,23 @@ macro_rules! impl_bit_ops {
         /// ```
         #[must_use]
         #[inline]
-        pub const fn highest_bit(val: $primitive_ty) -> Option<$primitive_ty> {
-            if val == 0 {
+        pub const fn highest_bit(base: $primitive_ty) -> Option<$primitive_ty> {
+            if base == 0 {
                 None
             } else {
                 let max_pos = BIT_COUNT - 1;
-                let bit = max_pos - (val.leading_zeros() as $primitive_ty);
+                let bit = max_pos - (base.leading_zeros() as $primitive_ty);
                 Some(bit)
             }
         }
 
-        /// Returns the lowest bit that is set.
+        /// Returns the lowest bit that is set, if any.
         ///
         /// The bit position starts at `0`.
+        ///
+        /// # Parameters
+        ///
+        /// - `base`: Base value to get lowest bit from.
         ///
         /// # Example
         ///
@@ -401,21 +439,34 @@ macro_rules! impl_bit_ops {
         /// ```
         #[must_use]
         #[inline]
-        pub const fn lowest_bit(val: $primitive_ty) -> Option<$primitive_ty> {
-            if val == 0 {
+        pub const fn lowest_bit(base: $primitive_ty) -> Option<$primitive_ty> {
+            if base == 0 {
                 None
             } else {
-                Some(val.trailing_zeros() as $primitive_ty)
+                Some(base.trailing_zeros() as $primitive_ty)
             }
         }
 
-        /// Get the requested contiguous bits as new integer.
+        /// Returns the requested contiguous bits as new integer.
         ///
         /// # Parameters
         ///
         /// - `base`: Base value to get a specific set of bits from.
-        /// - `value_bits`: Amount of bits of `value` that are relevant.
-        /// - `value_shift`: Position of `value` inside `self`, starting from the right/LSB (`0`).
+        /// - `value_bits`: Amount of bits of `base` that are relevant.
+        /// - `value_shift`: Position of `value` inside `self`, starting from
+        ///                  the right/LSB (`0`).
+        ///
+        /// # Example
+        ///
+        /// ```rust
+        #[doc = concat!("use bit_ops::bitops_", stringify!($primitive_ty), "::get_bits;")]
+        ///
+        /// let value = 0b1101;
+        /// let relevant_bits = 3;
+        ///
+        /// assert_eq!(get_bits(value, relevant_bits, 0 /* shift */), 0b101);
+        /// assert_eq!(get_bits(value, relevant_bits, 1 /* shift */), 0b110);
+        /// ```
         ///
         /// # Panics
         ///
@@ -433,6 +484,10 @@ macro_rules! impl_bit_ops {
         }
 
         /// Creates a bitmask (`1`s) with the given amount of contiguous bits.
+        ///
+        /// # Parameters
+        ///
+        /// - `bits`: Amount of contiguous bits.
         ///
         /// # Example
         ///

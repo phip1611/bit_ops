@@ -61,8 +61,8 @@ pub trait BitOps: Copy + Sized {
     /// # Parameters
     ///
     /// - `value`: Base value to alter.
-    /// - `bits`: Amount of bits of `value` that are relevant, starting from the right.
-    /// - `shift`: Relevant position of bits inside `value`, starting from the right.
+    /// - `bits`: Amount of bits of `value` that are relevant.
+    /// - `shift`: Relevant position of bits inside `value`, starting from the right/LSB (`0`).
     #[must_use]
     fn toggle_bits(self, bits: Self, shift: Self) -> Self;
 
@@ -71,8 +71,8 @@ pub trait BitOps: Copy + Sized {
     /// # Parameters
     ///
     /// - `value`: New value/bits to be set in `base`, but unshifted.
-    /// - `value_bits`: Amount of bits of `value` that are relevant, starting from the right.
-    /// - `value_shit`: Position of `value` inside `self`.
+    /// - `value_bits`: Amount of bits of `value` that are relevant.
+    /// - `value_shift`: Position of `value` inside `self`, starting from the right/LSB (`0`).
     #[must_use]
     fn set_bits(self, value: Self, value_bits: Self, value_shift: Self) -> Self;
 
@@ -128,9 +128,8 @@ pub trait BitOps: Copy + Sized {
     ///
     /// # Parameters
     ///
-    /// - `value_bits`: Amount of bits of `value` that are relevant, starting
-    ///                 from the right.
-    /// - `value_shit`: Position of `value` inside `self`.
+    /// - `value_bits`: Amount of bits of `value` that are relevant.
+    /// - `value_shift`: Position of `value` inside `self`, starting from the right/LSB (`0`).
     #[must_use]
     fn get_bits(self, value_bits: Self, value_shift: Self) -> Self;
 

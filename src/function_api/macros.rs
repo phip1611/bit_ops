@@ -169,8 +169,8 @@ macro_rules! impl_bit_ops {
         /// # Parameters
         ///
         /// - `value`: Base value to alter.
-        /// - `bits`: Amount of bits of `value` that are relevant, starting from the right.
-        /// - `shift`: Relevant position of bits inside `value`, starting from the right.
+        /// - `bits`: Amount of bits of `value` that are relevant.
+        /// - `shift`: Relevant position of bits inside `value`, starting from the right/LSB (`0`).
         ///
         /// # Example
         ///
@@ -208,8 +208,8 @@ macro_rules! impl_bit_ops {
         ///
         /// - `base`: Base value to set bits in.
         /// - `value`: New value/bits to be set in `base`, but unshifted.
-        /// - `value_bits`: Amount of bits of `value` that are relevant, starting from the right.
-        /// - `value_shit`: Position of `value` inside `base`, starting from the right.
+        /// - `value_bits`: Amount of bits of `value` that are relevant.
+        /// - `value_shift`: Position of `value` inside `base`, starting from the right/LSB (`0`).
         ///
         /// # Example
         ///
@@ -414,9 +414,8 @@ macro_rules! impl_bit_ops {
         /// # Parameters
         ///
         /// - `base`: Base value to get a specific set of bits from.
-        /// - `value_bits`: Amount of bits of `value` that are relevant, starting
-        ///                 from the right.
-        /// - `value_shit`: Position of `value` inside `self`.
+        /// - `value_bits`: Amount of bits of `value` that are relevant.
+        /// - `value_shift`: Position of `value` inside `self`, starting from the right/LSB (`0`).
         ///
         /// # Panics
         ///

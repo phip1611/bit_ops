@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## v0.1.15 - 2025-01-07
+
+- Improved documentation
+
 ## v0.1.14 - 2025-01-07
 
 - Improved documentation

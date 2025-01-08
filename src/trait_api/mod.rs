@@ -94,11 +94,27 @@ pub trait BitOps: Copy + Sized {
     /// - `value_bits`: Amount of bits of `value` that are relevant.
     /// - `value_shift`: Position of `value` inside `self`, starting from the
     ///                  right/LSB (`0`).
+    ///
+    /// # Panics
+    ///
+    /// This function panics for overflowing shifts and bit positions that
+    /// are outside the range of the underlying type.
     #[must_use]
     fn set_bits(self, value: Self, value_bits: Self, value_shift: Self) -> Self;
 
     /// Version of [`Self::set_bits`] that applies a list of multiple values to
     /// the base.
+    ///
+    /// # Parameters
+    ///
+    /// - `base`: Base value to alter.
+    /// - `ops`: Tuple of (`value`, `value_bits`, `value_shift`) where each
+    ///   tuple member corresponds to the parameter in [`set_bits`].
+    ///
+    /// # Panics
+    ///
+    /// This function panics for overflowing shifts and bit positions that
+    /// are outside the range of the underlying type.
     #[must_use]
     fn set_bits_n(
         self,
@@ -111,10 +127,33 @@ pub trait BitOps: Copy + Sized {
 
     /// Like [`Self::set_bits`] but calls [`Self::clear_bits`] beforehand for
     /// the relevant bits.
+    ///
+    /// # Parameters
+    ///
+    /// - `value`: New value/bits to be set in `base`.
+    /// - `value_bits`: Amount of bits of `value` that are relevant.
+    /// - `value_shift`: Position of `value` inside `self`, starting from the
+    ///                  right/LSB (`0`).
+    ///
+    /// # Panics
+    ///
+    /// This function panics for overflowing shifts and bit positions that
+    /// are outside the range of the underlying type.
     #[must_use]
     fn set_bits_exact(self, value: Self, value_bits: Self, value_shift: Self) -> Self;
 
     /// Combination of [`Self::set_bits_exact`] and [`Self::set_bits_n`].
+    ///
+    /// # Parameters
+    ///
+    /// - `base`: Base value to alter.
+    /// - `ops`: Tuple of (`value`, `value_bits`, `value_shift`) where each
+    ///   tuple member corresponds to the parameter in [`set_bits`].
+    ///
+    /// # Panics
+    ///
+    /// This function panics for overflowing shifts and bit positions that
+    /// are outside the range of the underlying type.
     #[must_use]
     fn set_bits_exact_n(
         self,

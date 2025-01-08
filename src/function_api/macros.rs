@@ -261,6 +261,7 @@ macro_rules! impl_bit_ops {
         /// ```
         ///
         /// # Panics
+        ///
         /// This function panics for overflowing shifts and bit positions that
         /// are outside the range of the underlying type.
         #[must_use]
@@ -285,7 +286,7 @@ macro_rules! impl_bit_ops {
         ///
         /// - `base`: Base value to alter.
         /// - `ops`: Tuple of (`value`, `value_bits`, `value_shift`) where each
-        ///   tuple member corresponds to the parameter in [`set_bits_n`].
+        ///   tuple member corresponds to the parameter in [`set_bits`].
         ///
         /// # Example
         ///
@@ -312,6 +313,7 @@ macro_rules! impl_bit_ops {
         /// ```
         ///
         /// # Panics
+        ///
         /// This function panics for overflowing shifts and bit positions that
         /// are outside the range of the underlying type.
         #[must_use]
@@ -336,6 +338,39 @@ macro_rules! impl_bit_ops {
 
         /// Like [`set_bits`] but calls [`clear_bits`] beforehand for the
         /// relevant bits.
+        ///
+        /// # Parameters
+        ///
+        /// - `base`: Base value to alter.
+        /// - `value`: New value/bits to be set in `base`.
+        /// - `value_bits`: Amount of bits of `value` that are relevant.
+        /// - `value_shift`: Position of `value` inside `base`, starting from
+        ///                  the right/LSB (`0`).
+        ///
+        /// # Example
+        ///
+        /// ```rust
+        #[doc = concat!("use bit_ops::bitops_", stringify!($primitive_ty), "::set_bits_exact;")]
+        ///
+        /// // props of a fictional interrupt controller
+        /// let delivery_mode = 0b001;
+        /// let delivery_mode_bits = 3;
+        /// let delivery_mode_shift = 3;
+        /// assert_eq!(
+        ///     set_bits_exact(
+        ///         0b111011,
+        ///         delivery_mode,
+        ///         delivery_mode_bits,
+        ///         delivery_mode_shift,
+        ///     ),
+        ///     0b001011
+        /// );
+        /// ```
+        ///
+        /// # Panics
+        ///
+        /// This function panics for overflowing shifts and bit positions that
+        /// are outside the range of the underlying type.
         #[must_use]
         #[inline]
         pub const fn set_bits_exact(
@@ -350,6 +385,41 @@ macro_rules! impl_bit_ops {
         }
 
         /// Combination of [`set_bits_exact`] and [`set_bits_n`].
+        ///
+        /// # Parameters
+        ///
+        /// - `base`: Base value to alter.
+        /// - `ops`: Tuple of (`value`, `value_bits`, `value_shift`) where each
+        ///   tuple member corresponds to the parameter in [`set_bits`].
+        ///
+        /// # Example
+        ///
+        /// ```rust
+        #[doc = concat!("use bit_ops::bitops_", stringify!($primitive_ty), "::set_bits_n;")]
+        ///
+        /// // props of a fictional interrupt controller
+        /// let vector = 0b1_1101;
+        /// let vector_bits = 5;
+        /// let vector_shift = 0;
+        /// let delivery_mode = 0b111;
+        /// let delivery_mode_bits = 3;
+        /// let delivery_mode_shift = 5;
+        /// assert_eq!(
+        ///     set_bits_n(
+        ///         0,
+        ///         &[
+        ///             (vector, vector_bits, vector_shift),
+        ///             (delivery_mode, delivery_mode_bits, delivery_mode_shift),
+        ///         ],
+        ///     ),
+        ///     0b1111_1101
+        /// );
+        /// ```
+        ///
+        /// # Panics
+        ///
+        /// This function panics for overflowing shifts and bit positions that
+        /// are outside the range of the underlying type.
         #[must_use]
         #[inline]
         pub const fn set_bits_exact_n(

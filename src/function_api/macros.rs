@@ -85,12 +85,12 @@ macro_rules! impl_bit_ops {
         /// # Example
         ///
         /// ```rust
-        #[doc = concat!("use bit_ops::bitops_", stringify!($primitive_ty), "::set_bit_to;")]
+        #[doc = concat!("use bit_ops::bitops_", stringify!($primitive_ty), "::set_bit_exact;")]
         ///
-        /// let raw = set_bit_to(0, 7, true);
+        /// let raw = set_bit_exact(0, 7, true);
         /// assert_eq!(raw, 0b1000_0000);
         ///
-        /// let raw = set_bit_to(0b1000_0000, 7, false);
+        /// let raw = set_bit_exact(0b1000_0000, 7, false);
         /// assert_eq!(raw, 0b0000_0000);
         ///
         /// ```
@@ -100,7 +100,7 @@ macro_rules! impl_bit_ops {
         /// the underlying type.
         #[must_use]
         #[inline]
-        pub const fn set_bit_to(
+        pub const fn set_bit_exact(
             base: $primitive_ty,
             bit: $primitive_ty,
             value: bool,

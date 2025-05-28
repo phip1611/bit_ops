@@ -67,18 +67,18 @@ mod tests {
     }
 
     #[test]
-    fn set_bit_to() {
-        assert_eq!(bitops_u8::set_bit_to(0, 0, true), 1);
-        assert_eq!(bitops_u8::set_bit_to(0, 0, false), 0);
-        assert_eq!(bitops_u8::set_bit_to(1, 1, true), 3);
-        assert_eq!(bitops_u8::set_bit_to(1, 0, true), 1);
-        assert_eq!(bitops_u8::set_bit_to(1, 0, false), 0);
+    fn set_bit_exact() {
+        assert_eq!(bitops_u8::set_bit_exact(0, 0, true), 1);
+        assert_eq!(bitops_u8::set_bit_exact(0, 0, false), 0);
+        assert_eq!(bitops_u8::set_bit_exact(1, 1, true), 3);
+        assert_eq!(bitops_u8::set_bit_exact(1, 0, true), 1);
+        assert_eq!(bitops_u8::set_bit_exact(1, 0, false), 0);
 
-        assert_eq!(bitops_u64::set_bit_to(0, 0, true), 1);
-        assert_eq!(bitops_u64::set_bit_to(0, 0, false), 0);
-        assert_eq!(bitops_u64::set_bit_to(1, 1, true), 3);
-        assert_eq!(bitops_u64::set_bit_to(1, 0, true), 1);
-        assert_eq!(bitops_u64::set_bit_to(1, 0, false), 0);
+        assert_eq!(bitops_u64::set_bit_exact(0, 0, true), 1);
+        assert_eq!(bitops_u64::set_bit_exact(0, 0, false), 0);
+        assert_eq!(bitops_u64::set_bit_exact(1, 1, true), 3);
+        assert_eq!(bitops_u64::set_bit_exact(1, 0, true), 1);
+        assert_eq!(bitops_u64::set_bit_exact(1, 0, false), 0);
     }
 
     #[test]

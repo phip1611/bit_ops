@@ -73,6 +73,45 @@ macro_rules! impl_bit_ops {
             base | (1 << bit)
         }
 
+        /// Sets the given bit to the given value.
+        ///
+        /// The bit position starts at `0`.
+        ///
+        /// # Parameters
+        ///
+        /// - `base`: Base value to alter.
+        /// - `bit`: Bit to set, starting at position `0`.
+        /// - `value`: Value to set.
+        /// # Example
+        ///
+        /// ```rust
+        #[doc = concat!("use bit_ops::bitops_", stringify!($primitive_ty), "::set_bit_to;")]
+        ///
+        /// let raw = set_bit_to(0, 7, true);
+        /// assert_eq!(raw, 0b1000_0000);
+        ///
+        /// let raw = set_bit_to(0b1000_0000, 7, false);
+        /// assert_eq!(raw, 0b0000_0000);
+        ///
+        /// ```
+        ///
+        /// # Panics
+        /// This function panics for bit positions that are outside the range of
+        /// the underlying type.
+        #[must_use]
+        #[inline]
+        pub const fn set_bit_to(
+            base: $primitive_ty,
+            bit: $primitive_ty,
+            value: bool,
+        ) -> $primitive_ty {
+            if value {
+                set_bit(base, bit)
+            } else {
+                clear_bit(base, bit)
+            }
+        }
+
         /// Clears the given bit by setting it to `0`.
         ///
         /// The bit position starts at `0`.

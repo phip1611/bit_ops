@@ -18,6 +18,7 @@ fn const_compatible() {
     const fn compiles() {
         use bitops_u64::*;
         let _ = set_bit(0, 0);
+        let _ = set_bit_exact(0, 0, false);
         let _ = clear_bit(0, 0);
         let _ = is_set(0, 0);
         let _ = toggle_bit(0, 0);
@@ -47,4 +48,10 @@ fn test_public_trait_api() {
 
     let raw = 0_u64.set_bit(0).set_bit(1).set_bit(4);
     assert_eq!(raw, 0b10011);
+
+    let raw = 0b10101010_u8
+        .set_bit_exact(0, true)
+        .set_bit_exact(1, false)
+        .set_bit_exact(7, false);
+    assert_eq!(raw, 0b00101001);
 }

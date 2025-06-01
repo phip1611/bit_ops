@@ -36,6 +36,17 @@ pub trait BitOps: Copy + Sized {
     #[must_use]
     fn set_bit(self, bit: Self) -> Self;
 
+    /// Sets the given bit to the given value.
+    ///
+    /// The bit position starts at `0`.
+    ///
+    /// # Parameters
+    ///
+    /// - `bit`: Bit to set, starting at position `0`.
+    /// - `value`: Value to set.
+    #[must_use]
+    fn set_bit_exact(self, bit: Self, value: bool) -> Self;
+
     /// Clears the given bit by setting it to `0`.
     ///
     /// The bit position starts at `0`.

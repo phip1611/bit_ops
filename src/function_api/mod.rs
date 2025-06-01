@@ -67,6 +67,21 @@ mod tests {
     }
 
     #[test]
+    fn set_bit_exact() {
+        assert_eq!(bitops_u8::set_bit_exact(0, 0, true), 1);
+        assert_eq!(bitops_u8::set_bit_exact(0, 0, false), 0);
+        assert_eq!(bitops_u8::set_bit_exact(1, 1, true), 3);
+        assert_eq!(bitops_u8::set_bit_exact(1, 0, true), 1);
+        assert_eq!(bitops_u8::set_bit_exact(1, 0, false), 0);
+
+        assert_eq!(bitops_u64::set_bit_exact(0, 0, true), 1);
+        assert_eq!(bitops_u64::set_bit_exact(0, 0, false), 0);
+        assert_eq!(bitops_u64::set_bit_exact(1, 1, true), 3);
+        assert_eq!(bitops_u64::set_bit_exact(1, 0, true), 1);
+        assert_eq!(bitops_u64::set_bit_exact(1, 0, false), 0);
+    }
+
+    #[test]
     fn clear_bit() {
         assert_eq!(bitops_u8::clear_bit(1, 0), 0);
         assert_eq!(bitops_u8::clear_bit(3, 1), 1);

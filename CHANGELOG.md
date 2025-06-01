@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+## v0.1.16 - 2025-06-01
+
+- Added `set_bit_exact` which allows setting a bit to an exact value.
+  The existing `set_bit` can only set a bit to `1`.
+
 ## v0.1.15 - 2025-01-07
 
 - Improved documentation

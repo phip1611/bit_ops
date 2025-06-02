@@ -39,8 +39,6 @@ SOFTWARE.
 )]
 // I can't do anything about this; fault of the dependencies
 #![allow(clippy::multiple_crate_versions)]
-// allow: required because of derive macro.. :(
-#![allow(clippy::use_self)]
 #![deny(missing_docs)]
 #![deny(missing_debug_implementations)]
 #![deny(rustdoc::all)]

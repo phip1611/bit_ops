@@ -1,9 +1,10 @@
 name: Build
 
-on:
-  merge_group:
-  pull_request:
-  push:
+on: [ push, pull_request, merge_group ]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
 
 env:
   CARGO_TERM_COLOR: always

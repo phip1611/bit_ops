@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Added `BitsIter` and `BitmapIter` to iterate set bits in unsigned integers
+  and bitmaps.
+
 ## v0.1.16 - 2025-06-01
 
 - Added `set_bit_exact` which allows setting a bit to an exact value.

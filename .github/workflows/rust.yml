@@ -25,6 +25,8 @@ jobs:
         run: cargo fmt -- --check
       - name: cargo clippy
         run: cargo clippy --all-targets
+      - name: cargo doc
+        run: cargo doc --document-private-items --no-deps
 
   build:
     strategy:

@@ -1,6 +1,6 @@
 //! This is just a simple test ensuring the public API works as expected.
 
-use bit_ops::{bitops_u64, BitOps};
+use bit_ops::{BitOps, bitops_u64};
 
 #[test]
 fn test_public_function_api() {

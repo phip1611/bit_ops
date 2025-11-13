@@ -20,5 +20,10 @@ repository = "https://github.com/phip1611/bit_ops"
 documentation = "https://docs.rs/bit_ops"
 rust-version = "1.85.1" # MSRV
 
+[profile.release]
+lto = true
+codegen-units = 1
+opt-level = 3
+
 [dependencies]
 paste = "1.0.15"

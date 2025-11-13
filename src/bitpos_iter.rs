@@ -126,7 +126,20 @@ where
     <U as TryInto<usize>>::Error: Debug,
 {
     /// Creates a new iterator.
-    pub fn new(mut bitmap_iter: I) -> Self {
+    ///
+    /// This consumes everything that implements [`IntoIterator`] for an
+    /// [`Iterator`] of the corresponding [`Uint`].
+    ///
+    /// # Example
+    /// ```rust
+    /// # use bit_ops::BitmapIter;
+    /// let _ = BitmapIter::<u8, _>::new([0_u8]);
+    /// let _ = BitmapIter::<u16, _>::new([0_u16].iter().copied());
+    /// let _ = BitmapIter::<u16, _>::new((&[0_u16]).iter().copied());
+    /// let _ = BitmapIter::<usize, _>::new((vec![42_usize]));
+    /// ```
+    pub fn new<In: IntoIterator<IntoIter = I>>(bitmap_iter: In) -> Self {
+        let mut bitmap_iter = bitmap_iter.into_iter();
         let current_element_it = BitsIter::new(bitmap_iter.next().unwrap_or(U::ZERO));
         Self {
             bitmap_iter,
@@ -182,14 +195,14 @@ mod tests {
     }
 
     #[test]
-    fn test_bitmap_bits_iter() {
-        let iter = BitmapIter::<u8, _>::new([0_u8].into_iter());
+    fn test_bitmap_iter() {
+        let iter = BitmapIter::<u8, _>::new([0_u8]);
         assert_eq!(&iter.collect::<Vec<_>>(), &[]);
 
-        let iter = BitmapIter::<u8, _>::new([0b1111_0010, 0b1000, 1].into_iter());
+        let iter = BitmapIter::<u8, _>::new([0b1111_0010, 0b1000, 1]);
         assert_eq!(&iter.collect::<Vec<_>>(), &[1, 4, 5, 6, 7, 11, 16]);
 
-        let iter = BitmapIter::<u128, _>::new([0b10, 0b10, 0b11].into_iter());
+        let iter = BitmapIter::<u128, _>::new([0b10, 0b10, 0b11]);
         assert_eq!(&iter.collect::<Vec<_>>(), &[1, 129, 256, 257]);
     }
 }

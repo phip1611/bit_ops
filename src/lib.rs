@@ -148,8 +148,13 @@ SOFTWARE.
 //!
 //! MIT License.
 
+#[cfg(test)]
+extern crate std;
+
+mod bitpos_iter;
 mod function_api;
 mod trait_api;
 
+pub use bitpos_iter::*;
 pub use function_api::*;
 pub use trait_api::*;

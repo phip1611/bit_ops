@@ -120,7 +120,7 @@ pub trait BitOps: Copy + Sized {
     ///
     /// - `base`: Base value to alter.
     /// - `ops`: Tuple of (`value`, `value_bits`, `value_shift`) where each
-    ///   tuple member corresponds to the parameter in [`set_bits`].
+    ///   tuple member corresponds to the parameters in [`Self::set_bits`].
     ///
     /// # Panics
     ///
@@ -159,7 +159,7 @@ pub trait BitOps: Copy + Sized {
     ///
     /// - `base`: Base value to alter.
     /// - `ops`: Tuple of (`value`, `value_bits`, `value_shift`) where each
-    ///   tuple member corresponds to the parameter in [`set_bits`].
+    ///   tuple member corresponds to the parameters in [`Self::set_bits_exact`].
     ///
     /// # Panics
     ///

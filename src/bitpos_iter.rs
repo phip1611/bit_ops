@@ -156,18 +156,18 @@ where
     type Item = usize;
 
     fn next(&mut self) -> Option<Self::Item> {
-        if let Some(bit) = self.current_element_it.next() {
-            let bit = bit.try_into().unwrap();
-            return Some(bit + self.consumed_count);
+        loop {
+            // We return here, if we currently have an element.
+            if let Some(bit) = self.current_element_it.next() {
+                let bit: usize = bit.try_into().unwrap();
+                return Some(bit + self.consumed_count);
+            }
+
+            // Current byte exhausted: load next one or return `None` / exit.
+            let next_byte = self.bitmap_iter.next()?;
+            self.consumed_count += U::BITS;
+            self.current_element_it = BitsIter::new(next_byte);
         }
-
-        // Current byte exhausted: load next one or return `None` / exit.
-        let next_byte = self.bitmap_iter.next()?;
-        self.consumed_count += U::BITS;
-        self.current_element_it = BitsIter::new(next_byte);
-
-        // Immediately recurse into next()
-        self.next()
     }
 }
 

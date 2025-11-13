@@ -86,6 +86,7 @@ where
 {
     type Item = U;
 
+    #[inline]
     fn next(&mut self) -> Option<Self::Item> {
         if self.value == U::ZERO {
             return None;
@@ -155,6 +156,7 @@ where
 {
     type Item = usize;
 
+    #[inline]
     fn next(&mut self) -> Option<Self::Item> {
         loop {
             // We return here, if we currently have an element.

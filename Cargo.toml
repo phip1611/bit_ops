@@ -6,8 +6,8 @@ Common bit-oriented operations on primitive integer types with a focus on
 create sophisticated high-level types with bitfields, the focus of `bit_ops` is
 on raw primitive integer types.
 """
-version = "0.1.16"
-edition = "2021"
+version = "0.2.0"
+edition = "2024"
 authors = [
   "Philipp Schuster <phip1611@gmail.com>"
 ]
@@ -18,7 +18,7 @@ license = "MIT"
 homepage = "https://github.com/phip1611/bit_ops"
 repository = "https://github.com/phip1611/bit_ops"
 documentation = "https://docs.rs/bit_ops"
-rust-version = "1.57" # MSRV
+rust-version = "1.85.1" # MSRV
 
 [dependencies]
 paste = "1.0.15"

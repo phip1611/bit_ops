@@ -34,7 +34,7 @@ jobs:
       matrix:
         runs-on: [ macos-latest, ubuntu-latest, windows-latest ]
         # MSRV
-        rust: [ 1.57.0, stable, nightly ]
+        rust: [ 1.85.1, stable, nightly ]
     runs-on: ${{ matrix.runs-on }}
     steps:
       - uses: actions/checkout@v5

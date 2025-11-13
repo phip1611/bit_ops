@@ -1,9 +1,11 @@
 # Changelog of `bit_ops`
 
-## Unreleased
+## v0.2.0 - 2025-11-13
 
+- **Breaking**: Rust edition 2024, MSRV is now 1.85.1
 - Added `BitsIter` and `BitmapIter` to iterate set bits in unsigned integers
   and bitmaps.
+- Documentation fixes
 
 ## v0.1.16 - 2025-06-01
 

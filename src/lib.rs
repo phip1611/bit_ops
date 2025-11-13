@@ -142,7 +142,7 @@ SOFTWARE.
 //!
 //! ## MSRV
 //!
-//! 1.57.0 stable
+//! 1.85.1 stable
 //!
 //! ## License
 //!

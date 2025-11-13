@@ -59,3 +59,22 @@ jobs:
       - name: cargo build (release)
         run: cargo build --verbose --release
       - run: cargo test --verbose
+
+  bench:
+    strategy:
+      fail-fast: false
+      matrix:
+        runs-on: [ macos-latest, ubuntu-latest, windows-latest ]
+        rust: [ stable ]
+    runs-on: ${{ matrix.runs-on }}
+    steps:
+      - uses: actions/checkout@v5
+      - name: Setup Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: ${{ matrix.rust }}
+      - uses: Swatinem/rust-cache@v2
+        with:
+          key: "${{ matrix.runs-on }}-${{ matrix.rust }}"
+      - name: cargo bench
+        run: cargo bench

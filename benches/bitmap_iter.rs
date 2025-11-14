@@ -1,4 +1,5 @@
 use bit_ops::BitmapIter;
+use bitvec::prelude::Lsb0;
 use criterion::{Criterion, criterion_group, criterion_main};
 use rand::Rng;
 use std::hint::black_box;
@@ -42,7 +43,7 @@ fn get_random_bitmap_u64(ones_percent: u64) -> Box<[u64]> {
 }
 
 fn bench_bitmap_iter(c: &mut Criterion) {
-    c.bench_function("bitmap_iter_u8_0%ones", |b| {
+    /*c.bench_function("bitmap_iter_u8_0%ones", |b| {
         let bitmap = get_random_bitmap_u8(0);
         b.iter(|| {
             let iter = BitmapIter::<u8, _>::new(black_box(bitmap.as_ref().iter().copied()));
@@ -86,8 +87,8 @@ fn bench_bitmap_iter(c: &mut Criterion) {
                 let _ = black_box(x);
             }
         })
-    });
-
+    });*/
+    /* ------------------------------------------------------------ */
     c.bench_function("bitmap_iter_u64_0%ones", |b| {
         let bitmap = get_random_bitmap_u64(0);
         b.iter(|| {
@@ -128,6 +129,57 @@ fn bench_bitmap_iter(c: &mut Criterion) {
         let bitmap = get_random_bitmap_u64(99);
         b.iter(|| {
             let iter = BitmapIter::new(black_box(bitmap.as_ref().iter().copied()));
+            for x in iter {
+                let _ = black_box(x);
+            }
+        })
+    });
+    /* ------------------------------------------------------------ */
+    c.bench_function("bitvec_iter_u64_0%ones", |b| {
+        let bitmap = get_random_bitmap_u64(0);
+        b.iter(|| {
+            let iter = bitvec::slice::BitSlice::<u64, Lsb0>::from_slice(&bitmap);
+            let iter = iter.iter_ones();
+            for x in iter {
+                let _ = black_box(x);
+            }
+        })
+    });
+    c.bench_function("bitvec_iter_u64_10%ones", |b| {
+        let bitmap = get_random_bitmap_u64(10);
+        b.iter(|| {
+            let iter = bitvec::slice::BitSlice::<u64, Lsb0>::from_slice(&bitmap);
+            let iter = iter.iter_ones();
+            for x in iter {
+                let _ = black_box(x);
+            }
+        })
+    });
+    c.bench_function("bitvec_iter_u64_40%ones", |b| {
+        let bitmap = get_random_bitmap_u64(40);
+        b.iter(|| {
+            let iter = bitvec::slice::BitSlice::<u64, Lsb0>::from_slice(&bitmap);
+            let iter = iter.iter_ones();
+            for x in iter {
+                let _ = black_box(x);
+            }
+        })
+    });
+    c.bench_function("bitvec_iter_u64_70%ones", |b| {
+        let bitmap = get_random_bitmap_u64(70);
+        b.iter(|| {
+            let iter = bitvec::slice::BitSlice::<u64, Lsb0>::from_slice(&bitmap);
+            let iter = iter.iter_ones();
+            for x in iter {
+                let _ = black_box(x);
+            }
+        })
+    });
+    c.bench_function("bitvec_iter_u64_99%ones", |b| {
+        let bitmap = get_random_bitmap_u64(99);
+        b.iter(|| {
+            let iter = bitvec::slice::BitSlice::<u64, Lsb0>::from_slice(&bitmap);
+            let iter = iter.iter_ones();
             for x in iter {
                 let _ = black_box(x);
             }

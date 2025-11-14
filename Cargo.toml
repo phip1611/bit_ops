@@ -18,7 +18,7 @@ license = "MIT"
 homepage = "https://github.com/phip1611/bit_ops"
 repository = "https://github.com/phip1611/bit_ops"
 documentation = "https://docs.rs/bit_ops"
-rust-version = "1.87.0" # MSRV
+rust-version = "1.85.1" # MSRV
 
 [profile.release]
 lto = true

@@ -4,8 +4,6 @@
 
 use core::fmt::Debug;
 use core::ops::{Add, BitAndAssign, Sub};
-use core::slice;
-use core::{cmp, iter};
 use wide::u64x8;
 
 /// **Internal helper** trait for [`BitsIter`].
@@ -189,95 +187,99 @@ where
     }
 }*/
 
-///
+/// .
 #[derive(Debug)]
-pub struct SimdBitmapIter<'a> {
-    data: &'a [u64],
+pub struct SimdBitmapIter<I> {
+    underlying_it: I,
     buffer: u64x8,
-    u64_count: u64,
-    // In case we couldn't use the fast path (all zeroes) we iterate
-    // using the current BitmapIter.
-    slowpath_iter: Option<BitmapIter<u64, iter::Copied<slice::Iter<'a, u64>>>>,
+    elems_to_iter_normally: usize,
+    current_bitpos_iter: Option<BitsIter<u64>>,
+    count: usize,
 }
 
-impl<'a> SimdBitmapIter<'a> {
+impl<I: ExactSizeIterator<Item = u64>> SimdBitmapIter<I> {
     /// .
-    #[must_use]
-    pub const fn new(data: &'a [u64]) -> Self {
+    pub const fn new(underlying_it: I) -> Self {
         Self {
-            data,
+            underlying_it,
             buffer: u64x8::ZERO,
-            u64_count: 0,
-            slowpath_iter: None,
+            elems_to_iter_normally: 0,
+            current_bitpos_iter: None,
+            count: 0,
         }
     }
 }
 
-impl Iterator for SimdBitmapIter<'_> {
+impl<I: ExactSizeIterator<Item = u64> + Clone> Iterator for SimdBitmapIter<I> {
     type Item = u64;
 
     #[inline]
     fn next(&mut self) -> Option<Self::Item> {
-        const SIMD_WIDTH: u64 = 8;
         loop {
             // Iterate actual non-zero fields (discovered in a previous
-            // iteration).
-            if self.slowpath_iter.is_some() {
-                // SAFETY: We just checked that it is there.
-                let iter = unsafe { self.slowpath_iter.as_mut().unwrap_unchecked() };
+            // iteration) from the underlying buffer (we already consumed the
+            // iterator).
+            if self.elems_to_iter_normally > 0 {
+                // Update `self.current_bitpos_iter` if necessary
+                if self.current_bitpos_iter.is_none() {
+                    let index = 8 - self.elems_to_iter_normally;
+                    self.elems_to_iter_normally -= 1;
+                    // SAFETY: valid index.
+                    let elem = unsafe {
+                        *self.buffer.as_array().get_unchecked(index)
+                    };
+                    self.current_bitpos_iter = Some(BitsIter::new(elem));
+                }
+
+                // SAFETY: We just checked the iterator is there.
+                let iter = unsafe { self.current_bitpos_iter.as_mut().unwrap_unchecked() };
                 match iter.next() {
+                    // We still had at least one bit left on the current element
                     Some(pos) => {
-                        let pos = u64::try_from(pos).unwrap();
-                        let bit_count = self.u64_count * u64::BITS as u64;
-                        return Some(bit_count + pos);
+                        return Some(pos + self.count as u64);
                     }
-                    // In the next iteration, we will again try to use the
-                    // SIMD fast path.
+                    // We drained the current element
                     None => {
-                        self.u64_count += SIMD_WIDTH;
-                        self.slowpath_iter = None
+                        // Ensure we advance the element for the next
+                        // invocation.
+                        self.count += 64;
+                        let _ = self.current_bitpos_iter.take();
+                        continue;
                     }
                 }
             }
-
             // Using SIMD, we skip all only-zero elements (likely case).
             {
-                let remaining = u64::try_from(self.data.len()).unwrap() - self.u64_count;
-                if remaining == 0 {
-                    // done
+                let hint = self.underlying_it.size_hint().0;
+                if hint == 0 {
+                    // drained
                     return None;
                 }
+                if hint < 8 {
+                    panic!("hint is {hint}");
+                };
 
-                if remaining.is_multiple_of(SIMD_WIDTH) {
-                    // SAFETY: We checked the remaining length beforehand.
-                    self.buffer = unsafe {
-                        let u64_count = usize::try_from(self.u64_count).unwrap();
-                        u64x8::new([
-                            *self.data.get_unchecked(u64_count),
-                            *self.data.get_unchecked(u64_count + 1),
-                            *self.data.get_unchecked(u64_count + 2),
-                            *self.data.get_unchecked(u64_count + 3),
-                            *self.data.get_unchecked(u64_count + 4),
-                            *self.data.get_unchecked(u64_count + 5),
-                            *self.data.get_unchecked(u64_count + 6),
-                            *self.data.get_unchecked(u64_count + 7),
-                        ])
-                    };
+                // SAFETY: We checked the remaining length beforehand.
+                self.buffer = unsafe {
+                    u64x8::new([
+                        self.underlying_it.next().unwrap_unchecked(),
+                        self.underlying_it.next().unwrap_unchecked(),
+                        self.underlying_it.next().unwrap_unchecked(),
+                        self.underlying_it.next().unwrap_unchecked(),
+                        self.underlying_it.next().unwrap_unchecked(),
+                        self.underlying_it.next().unwrap_unchecked(),
+                        self.underlying_it.next().unwrap_unchecked(),
+                        self.underlying_it.next().unwrap_unchecked(),
+                    ])
+                };
 
-                    if self.buffer == u64x8::ZERO {
-                        self.u64_count += SIMD_WIDTH;
-                        continue;
-                    } else {
-                        /* Continue setting self.slowpath_iter */
-                    }
+                if self.buffer == u64x8::ZERO {
+                    self.count += 8 * 64;
+                    continue;
+                } else {
+                    self.elems_to_iter_normally = 8;
+                    continue;
                 }
-
-                // Set `self.slowpath_iter` with the next analyze window.
-                let start = usize::try_from(self.u64_count).unwrap();
-                let slice_len = usize::try_from(cmp::min(SIMD_WIDTH, remaining)).unwrap();
-                let end = start + slice_len;
-                let slice = &self.data[start..end];
-                self.slowpath_iter = Some(BitmapIter::new(slice.iter().copied()));
             }
         }
     }
@@ -321,15 +323,15 @@ mod tests {
     #[test]
     fn test_simd_bitmap_iter() {
         let data = [0, 0, 0, 0, 0, 0, 0, 0];
-        let iter = SimdBitmapIter::new(&data);
+        let iter = SimdBitmapIter::new(data.into_iter());
         assert_eq!(&iter.collect::<Vec<_>>(), &[]);
 
         let data = [1, 0, 0, 0, 0, 0, 0, 0];
-        let iter = SimdBitmapIter::new(&data);
+        let iter = SimdBitmapIter::new(data.into_iter());
         assert_eq!(&iter.collect::<Vec<_>>(), &[0]);
 
         let data = [1, 1, 0, 0, 0, 0, 0, 0];
-        let iter = SimdBitmapIter::new(&data);
+        let iter = SimdBitmapIter::new(data.into_iter());
         assert_eq!(&iter.collect::<Vec<_>>(), &[0, 64]);
 
         #[rustfmt::skip]
@@ -341,7 +343,7 @@ mod tests {
             0, 0, 0, 0, 0, 0, 0, 0,
             1, 1, 1, 1, 1, 1, 1, 1
         ];
-        let iter = SimdBitmapIter::new(&data);
+        let iter = SimdBitmapIter::new(data.into_iter());
         assert_eq!(
             &iter.collect::<Vec<_>>(),
             &[1024, 1280, 2560, 2624, 2688, 2752, 2816, 2880, 2944, 3008]

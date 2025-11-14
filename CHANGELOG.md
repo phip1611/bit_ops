@@ -3,9 +3,15 @@
 ## Unreleased
 
 
+## v0.2.2 - 2025-11-13
+
+- Improved documentation
+
+
 ## v0.2.1 - 2025-11-13
 
 - Improved implementation of `BitmapIter` significantly (50% performance gain)
+
 
 ## v0.2.0 - 2025-11-13
 

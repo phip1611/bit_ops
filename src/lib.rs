@@ -134,6 +134,14 @@ SOFTWARE.
 //! assert_eq!(raw, 0b110);
 //! ```
 //!
+//! ### Other Functionality
+//!
+//! `bit_ops` also offers additional functionality which is tightly connected
+//! to working with raw bits:
+//!
+//! - [`BitsIter`]
+//! - [`BitmapIter`]
+//!
 //! ## Comparison to other Crates
 //!
 //! `bit_ops` (this crate) is fresher, more feature-complete, and fully `no_std`

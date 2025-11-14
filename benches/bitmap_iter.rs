@@ -47,7 +47,7 @@ fn bench_bitmap_iter(c: &mut Criterion) {
     c.bench_function("bitmap_iter_u8_0%ones", |b| {
         let bitmap = get_random_bitmap_u8(0);
         b.iter(|| {
-            let iter = BitmapIter::<u8, _>::new(black_box(bitmap.as_ref().iter().copied()));
+            let iter = BitmapIter::<u8, _>::new(black_box(bitmap.iter().copied()));
             for x in iter {
                 let _ = black_box(x);
             }
@@ -56,7 +56,7 @@ fn bench_bitmap_iter(c: &mut Criterion) {
     c.bench_function("bitmap_iter_u8_10%ones", |b| {
         let bitmap = get_random_bitmap_u8(10);
         b.iter(|| {
-            let iter = BitmapIter::<u8, _>::new(black_box(bitmap.as_ref().iter().copied()));
+            let iter = BitmapIter::<u8, _>::new(black_box(bitmap.iter().copied()));
             for x in iter {
                 let _ = black_box(x);
             }
@@ -65,7 +65,7 @@ fn bench_bitmap_iter(c: &mut Criterion) {
     c.bench_function("bitmap_iter_u8_40%ones", |b| {
         let bitmap = get_random_bitmap_u8(40);
         b.iter(|| {
-            let iter = BitmapIter::<u8, _>::new(black_box(bitmap.as_ref().iter().copied()));
+            let iter = BitmapIter::<u8, _>::new(black_box(bitmap.iter().copied()));
             for x in iter {
                 let _ = black_box(x);
             }
@@ -74,7 +74,7 @@ fn bench_bitmap_iter(c: &mut Criterion) {
     c.bench_function("bitmap_iter_u8_70%ones", |b| {
         let bitmap = get_random_bitmap_u8(70);
         b.iter(|| {
-            let iter = BitmapIter::new(black_box(bitmap.as_ref().iter().copied()));
+            let iter = BitmapIter::new(black_box(bitmap.iter().copied()));
             for x in iter {
                 let _ = black_box(x);
             }
@@ -83,7 +83,7 @@ fn bench_bitmap_iter(c: &mut Criterion) {
     c.bench_function("bitmap_iter_u8_99%ones", |b| {
         let bitmap = get_random_bitmap_u8(99);
         b.iter(|| {
-            let iter = BitmapIter::new(black_box(bitmap.as_ref().iter().copied()));
+            let iter = BitmapIter::new(black_box(bitmap.iter().copied()));
             for x in iter {
                 let _ = black_box(x);
             }
@@ -93,7 +93,7 @@ fn bench_bitmap_iter(c: &mut Criterion) {
     c.bench_function("bitmap_iter_u64_0%ones", |b| {
         let bitmap = get_random_bitmap_u64(0);
         b.iter(|| {
-            let iter = BitmapIter::<u64, _>::new(black_box(bitmap.as_ref().iter().copied()));
+            let iter = BitmapIter::<u64, _>::new(black_box(bitmap.iter().copied()));
             for x in iter {
                 let _ = black_box(x);
             }
@@ -102,7 +102,7 @@ fn bench_bitmap_iter(c: &mut Criterion) {
     c.bench_function("bitmap_iter_u64_10%ones", |b| {
         let bitmap = get_random_bitmap_u64(10);
         b.iter(|| {
-            let iter = BitmapIter::<u64, _>::new(black_box(bitmap.as_ref().iter().copied()));
+            let iter = BitmapIter::<u64, _>::new(black_box(bitmap.iter().copied()));
             for x in iter {
                 let _ = black_box(x);
             }
@@ -111,7 +111,7 @@ fn bench_bitmap_iter(c: &mut Criterion) {
     c.bench_function("bitmap_iter_u64_40%ones", |b| {
         let bitmap = get_random_bitmap_u64(40);
         b.iter(|| {
-            let iter = BitmapIter::<u64, _>::new(black_box(bitmap.as_ref().iter().copied()));
+            let iter = BitmapIter::<u64, _>::new(black_box(bitmap.iter().copied()));
             for x in iter {
                 let _ = black_box(x);
             }
@@ -120,7 +120,7 @@ fn bench_bitmap_iter(c: &mut Criterion) {
     c.bench_function("bitmap_iter_u64_70%ones", |b| {
         let bitmap = get_random_bitmap_u64(70);
         b.iter(|| {
-            let iter = BitmapIter::new(black_box(bitmap.as_ref().iter().copied()));
+            let iter = BitmapIter::new(black_box(bitmap.iter().copied()));
             for x in iter {
                 let _ = black_box(x);
             }
@@ -129,7 +129,7 @@ fn bench_bitmap_iter(c: &mut Criterion) {
     c.bench_function("bitmap_iter_u64_99%ones", |b| {
         let bitmap = get_random_bitmap_u64(99);
         b.iter(|| {
-            let iter = BitmapIter::new(black_box(bitmap.as_ref().iter().copied()));
+            let iter = BitmapIter::new(black_box(bitmap.iter().copied()));
             for x in iter {
                 let _ = black_box(x);
             }

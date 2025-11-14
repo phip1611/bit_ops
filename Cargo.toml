@@ -27,6 +27,7 @@ opt-level = 3
 
 [dependencies]
 paste = "1.0.15"
+wide = "0.8.2"
 
 [dev-dependencies]
 criterion = "0.7.0"

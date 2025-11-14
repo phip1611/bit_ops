@@ -15,7 +15,8 @@ fn get_random_u8(ones_percent: u8) -> u8 {
 }
 
 fn get_random_bitmap_u8(ones_percent: u8) -> Box<[u8]> {
-    let mut vec = Vec::with_capacity(100_000);
+    /* 1 MiB */
+    let mut vec = Vec::with_capacity(1048576);
     for _ in 0..vec.capacity() {
         vec.push(get_random_u8(ones_percent));
     }
@@ -34,7 +35,8 @@ fn get_random_u64(ones_percent: u64) -> u64 {
 }
 
 fn get_random_bitmap_u64(ones_percent: u64) -> Box<[u64]> {
-    let mut vec = Vec::with_capacity(10_000);
+    // 1 MiB
+    let mut vec = Vec::with_capacity(131072);
     for _ in 0..vec.capacity() {
         vec.push(get_random_u64(ones_percent));
     }

@@ -173,55 +173,6 @@ where
     }
 }
 
-/// .
-#[derive(Debug)]
-pub struct BitmapSliceIter<'a, U> {
-    slice: &'a [U],
-    bits_count: usize,
-    element_count: usize,
-    current_element_it: BitsIter<U>,
-}
-
-impl<'a, U: Uint> BitmapSliceIter<'a, U>
-where
-    <U as TryInto<usize>>::Error: Debug,
-{
-    /// .
-    pub fn new<>(slice: &'a [U],) -> Self {
-        let current_element_it = BitsIter::new(slice[0]);
-        Self {
-            slice,
-            bits_count: 0,
-            element_count: 0,
-            current_element_it,
-        }
-    }
-}
-
-impl<'a, U: Uint> Iterator for BitmapSliceIter<'a, U>
-where
-    <U as TryInto<usize>>::Error: Debug,
-{
-    type Item = usize;
-
-    #[inline]
-    fn next(&mut self) -> Option<Self::Item> {
-        loop {
-            // We return here, if we currently have an element.
-            if let Some(bit) = self.current_element_it.next() {
-                let bit: usize = bit.try_into().unwrap();
-                return Some(bit + self.bits_count);
-            }
-
-            // Current byte exhausted: load next one or return `None` / exit.
-            self.element_count += 1;
-            self.bits_count += U::BITS;
-            let next_byte = self.slice.get(self.element_count)?;
-            self.current_element_it = BitsIter::new(*next_byte);
-        }
-    }
-}
-
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -254,18 +205,6 @@ mod tests {
         assert_eq!(&iter.collect::<Vec<_>>(), &[1, 4, 5, 6, 7, 11, 16]);
 
         let iter = BitmapIter::<u128, _>::new([0b10, 0b10, 0b11]);
-        assert_eq!(&iter.collect::<Vec<_>>(), &[1, 129, 256, 257]);
-    }
-
-    #[test]
-    fn test_bitmap_slice_iter() {
-        let iter = BitmapSliceIter::<u8>::new(&[0_u8]);
-        assert_eq!(&iter.collect::<Vec<_>>(), &[]);
-
-        let iter = BitmapSliceIter::<u8>::new(&[0b1111_0010, 0b1000, 1]);
-        assert_eq!(&iter.collect::<Vec<_>>(), &[1, 4, 5, 6, 7, 11, 16]);
-
-        let iter = BitmapSliceIter::<u128>::new(&[0b10, 0b10, 0b11]);
         assert_eq!(&iter.collect::<Vec<_>>(), &[1, 129, 256, 257]);
     }
 }

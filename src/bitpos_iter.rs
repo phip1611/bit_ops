@@ -230,7 +230,7 @@ mod tests {
     use std::vec::Vec;
 
     #[test]
-    fn test_bits_iter() {
+    fn bits_iter() {
         let iter = BitsIter::<u8>::new(0);
         assert_eq!(&iter.collect::<Vec<_>>(), &[]);
 
@@ -248,7 +248,7 @@ mod tests {
     }
 
     #[test]
-    fn test_bitmap_iter() {
+    fn bitmap_iter() {
         let iter = BitmapIter::<u8, _>::new([0_u8]);
         assert_eq!(&iter.collect::<Vec<_>>(), &[]);
 

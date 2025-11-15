@@ -1,4 +1,4 @@
-use bit_ops::BitmapIter;
+use bit_ops::BitposIteratorExt;
 use bitvec::prelude::Lsb0;
 use criterion::{Criterion, criterion_group, criterion_main};
 use rand::Rng;
@@ -65,7 +65,7 @@ fn bench_bitmap_iter(c: &mut Criterion) {
     c.bench_function("bitmap_iter_u8_0%ones", |b| {
         let bitmap = get_random_bitmap_u8(0.0);
         b.iter(|| {
-            let iter = BitmapIter::<u8, _>::new(black_box(bitmap.as_ref().iter().copied()));
+            let iter = bitmap.iter().copied().bit_positions();
             for x in iter {
                 let _ = black_box(x);
             }
@@ -74,7 +74,7 @@ fn bench_bitmap_iter(c: &mut Criterion) {
     c.bench_function("bitmap_iter_u8_0.1%ones", |b| {
         let bitmap = get_random_bitmap_u8(0.1);
         b.iter(|| {
-            let iter = BitmapIter::<u8, _>::new(black_box(bitmap.as_ref().iter().copied()));
+            let iter = bitmap.iter().copied().bit_positions();
             for x in iter {
                 let _ = black_box(x);
             }
@@ -83,7 +83,7 @@ fn bench_bitmap_iter(c: &mut Criterion) {
     c.bench_function("bitmap_iter_u8_1%ones", |b| {
         let bitmap = get_random_bitmap_u8(1.0);
         b.iter(|| {
-            let iter = BitmapIter::<u8, _>::new(black_box(bitmap.as_ref().iter().copied()));
+            let iter = bitmap.iter().copied().bit_positions();
             for x in iter {
                 let _ = black_box(x);
             }
@@ -92,7 +92,7 @@ fn bench_bitmap_iter(c: &mut Criterion) {
     c.bench_function("bitmap_iter_u8_5%ones", |b| {
         let bitmap = get_random_bitmap_u8(5.0);
         b.iter(|| {
-            let iter = BitmapIter::new(black_box(bitmap.as_ref().iter().copied()));
+            let iter = bitmap.iter().copied().bit_positions();
             for x in iter {
                 let _ = black_box(x);
             }
@@ -101,7 +101,7 @@ fn bench_bitmap_iter(c: &mut Criterion) {
     c.bench_function("bitmap_iter_u8_99.9%ones", |b| {
         let bitmap = get_random_bitmap_u8(99.9);
         b.iter(|| {
-            let iter = BitmapIter::new(black_box(bitmap.as_ref().iter().copied()));
+            let iter = bitmap.iter().copied().bit_positions();
             for x in iter {
                 let _ = black_box(x);
             }
@@ -111,7 +111,7 @@ fn bench_bitmap_iter(c: &mut Criterion) {
     c.bench_function("bitmap_iter_u64_0%ones", |b| {
         let bitmap = get_random_bitmap_u64(0.0);
         b.iter(|| {
-            let iter = BitmapIter::<u64, _>::new(black_box(bitmap.as_ref().iter().copied()));
+            let iter = bitmap.iter().copied().bit_positions();
             for x in iter {
                 let _ = black_box(x);
             }
@@ -120,7 +120,7 @@ fn bench_bitmap_iter(c: &mut Criterion) {
     c.bench_function("bitmap_iter_u64_0.1%ones", |b| {
         let bitmap = get_random_bitmap_u64(0.1);
         b.iter(|| {
-            let iter = BitmapIter::<u64, _>::new(black_box(bitmap.as_ref().iter().copied()));
+            let iter = bitmap.iter().copied().bit_positions();
             for x in iter {
                 let _ = black_box(x);
             }
@@ -129,7 +129,7 @@ fn bench_bitmap_iter(c: &mut Criterion) {
     c.bench_function("bitmap_iter_u64_1%ones", |b| {
         let bitmap = get_random_bitmap_u64(1.0);
         b.iter(|| {
-            let iter = BitmapIter::<u64, _>::new(black_box(bitmap.as_ref().iter().copied()));
+            let iter = bitmap.iter().copied().bit_positions();
             for x in iter {
                 let _ = black_box(x);
             }
@@ -138,7 +138,7 @@ fn bench_bitmap_iter(c: &mut Criterion) {
     c.bench_function("bitmap_iter_u64_5%ones", |b| {
         let bitmap = get_random_bitmap_u64(5.0);
         b.iter(|| {
-            let iter = BitmapIter::<u64, _>::new(black_box(bitmap.as_ref().iter().copied()));
+            let iter = bitmap.iter().copied().bit_positions();
             for x in iter {
                 let _ = black_box(x);
             }
@@ -147,7 +147,7 @@ fn bench_bitmap_iter(c: &mut Criterion) {
     c.bench_function("bitmap_iter_u64_99.9%ones", |b| {
         let bitmap = get_random_bitmap_u64(99.9);
         b.iter(|| {
-            let iter = BitmapIter::<u64, _>::new(black_box(bitmap.as_ref().iter().copied()));
+            let iter = bitmap.iter().copied().bit_positions();
             for x in iter {
                 let _ = black_box(x);
             }
@@ -157,7 +157,7 @@ fn bench_bitmap_iter(c: &mut Criterion) {
     c.bench_function("bitmap_iter_u128_0%ones", |b| {
         let bitmap = get_random_bitmap_u128(0.0);
         b.iter(|| {
-            let iter = BitmapIter::<u128, _>::new(black_box(bitmap.as_ref().iter().copied()));
+            let iter = bitmap.iter().copied().bit_positions();
             for x in iter {
                 let _ = black_box(x);
             }
@@ -166,7 +166,7 @@ fn bench_bitmap_iter(c: &mut Criterion) {
     c.bench_function("bitmap_iter_u128_0.1%ones", |b| {
         let bitmap = get_random_bitmap_u128(0.1);
         b.iter(|| {
-            let iter = BitmapIter::<u128, _>::new(black_box(bitmap.as_ref().iter().copied()));
+            let iter = bitmap.iter().copied().bit_positions();
             for x in iter {
                 let _ = black_box(x);
             }
@@ -175,7 +175,7 @@ fn bench_bitmap_iter(c: &mut Criterion) {
     c.bench_function("bitmap_iter_u128_1%ones", |b| {
         let bitmap = get_random_bitmap_u128(1.0);
         b.iter(|| {
-            let iter = BitmapIter::<u128, _>::new(black_box(bitmap.as_ref().iter().copied()));
+            let iter = bitmap.iter().copied().bit_positions();
             for x in iter {
                 let _ = black_box(x);
             }
@@ -184,7 +184,7 @@ fn bench_bitmap_iter(c: &mut Criterion) {
     c.bench_function("bitmap_iter_u128_5%ones", |b| {
         let bitmap = get_random_bitmap_u128(5.0);
         b.iter(|| {
-            let iter = BitmapIter::<u128, _>::new(black_box(bitmap.as_ref().iter().copied()));
+            let iter = bitmap.iter().copied().bit_positions();
             for x in iter {
                 let _ = black_box(x);
             }
@@ -193,7 +193,7 @@ fn bench_bitmap_iter(c: &mut Criterion) {
     c.bench_function("bitmap_iter_u128_99.9%ones", |b| {
         let bitmap = get_random_bitmap_u128(99.9);
         b.iter(|| {
-            let iter = BitmapIter::<u128, _>::new(black_box(bitmap.as_ref().iter().copied()));
+            let iter = bitmap.iter().copied().bit_positions();
             for x in iter {
                 let _ = black_box(x);
             }

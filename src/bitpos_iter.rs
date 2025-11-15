@@ -1,6 +1,12 @@
-//! Module providing iterators to iterate over set bits in an unsigned integer.
+//! Module providing iterators to iterate over set bits in unsigned integers.
 //!
-//! See [`BitsIter`] and [`BitmapIter`].
+//! See [`BitsIter`] and [`BitmapIter`]. The latter is included into Rust's
+//! [`Iterator`] API via [`BitposIteratorExt`].
+//!
+//! # Performance
+//!
+//! These iterators have been trimmed for performance and were benchmarked. See
+//! the project's README on GitHub for more details.
 
 use core::fmt::Debug;
 use core::ops::{Add, BitAndAssign, Sub};
@@ -103,17 +109,33 @@ where
 /// This wraps an iterator emitting corresponding unsigned integers and
 /// uses [`BitsIter`] on each element. While doing so, [`BitmapIter`] keeps
 /// track of consumed elements to properly report the bit position relative to
-/// the very first bit.
+/// the very first bit. We basically treat the incoming [`Uint`]s as one
+/// gigantic integer and just spit out which bits are set.
 ///
 /// The iterator can be used with [`u8`], [`u16`], [`u32`], [`u64`], [`u128`],
-/// and [`usize`].
+/// and [`usize`]. The [`BitposIteratorExt`] offers a convenient way to
+/// integrate this iterator in typical iterator chains.
 ///
 /// # Example
+///
+/// ## Direct Usage of Iterator
 /// ```rust
-/// # use bit_ops::BitmapIter;
+/// use bit_ops::BitmapIter;
+///
 /// // also works with u16, u32, u64, u128, and usize
 /// let iter = BitmapIter::<u8, _>::new([0b1111_0010, 0b1000, 1].into_iter());
 /// assert_eq!(&iter.collect::<Vec<_>>(), &[1, 4, 5, 6, 7, 11, 16]);
+/// ```
+///
+/// ## Use via Iterator Trait Extension
+/// ```rust
+/// use bit_ops::BitposIteratorExt;
+///
+/// // also works with u16, u32, u64, u128, and usize
+/// let bit_pos = [0b1111_0010_u8, 0b1000, 1].into_iter()
+///     .bit_positions()
+///     .collect::<Vec<_>>();
+/// assert_eq!(&bit_pos, &[1, 4, 5, 6, 7, 11, 16]);
 /// ```
 #[derive(Debug)]
 pub struct BitmapIter<U, I> {
@@ -171,6 +193,35 @@ where
             self.current_element_it = BitsIter::new(next_byte);
         }
     }
+}
+
+/// Extension for the Rust standard libraries [`Iterator`] for convenient
+/// integration of [`BitmapIter`].
+pub trait BitposIteratorExt<U: Uint>: Iterator<Item = U> + Sized
+where
+    <U as TryInto<usize>>::Error: Debug,
+{
+    /// Creates an iterator that emits which bits are set.
+    ///
+    /// See [`BitmapIter`] for more details.
+    ///
+    /// # Example
+    /// ```rust
+    /// use bit_ops::BitposIteratorExt;
+    /// let ones = [0b101_u64, 0, 1].into_iter()
+    ///     .bit_positions()
+    ///     .collect::<Vec<_>>();
+    /// assert_eq!(&ones, &[0, 2, 2*64]);
+    /// ```
+    fn bit_positions(self) -> BitmapIter<U, Self> {
+        BitmapIter::new(self)
+    }
+}
+
+// Blanked implementation for all matching iterators.
+impl<U: Uint, I: Iterator<Item = U> + Sized> BitposIteratorExt<U> for I where
+    <U as TryInto<usize>>::Error: Debug
+{
 }
 
 #[cfg(test)]

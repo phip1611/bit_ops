@@ -139,8 +139,7 @@ SOFTWARE.
 //! `bit_ops` also offers additional functionality which is tightly connected
 //! to working with raw bits:
 //!
-//! - [`BitsIter`]
-//! - [`BitmapIter`]
+//! - Module [`bitpos_iter`] exporting  [`BitsIter`] and [`BitmapIter`]
 //!
 //! ## Comparison to other Crates
 //!

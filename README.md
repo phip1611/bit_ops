@@ -59,6 +59,30 @@ fn main() {
 <!-- Keep in sync with lib.rs and Cargo.toml!  -->
 1.85 stable
 
+## Benchmarks
+
+Using `$ cargo bench`, you can execute benchmarks.
+
+### BitmapIter
+
+The `BitmapIter` is an iterator over set bits in (large) bitmaps, i.e.,
+collection of unsigned integers.
+
+| % 1 Bits | bit_ops::BitmapIter | [Julian's Version][jv] | BitVec   |
+|----------|---------------------|------------------------|----------|
+| 0.0      | 2,7 µs              | 2.8 µs                 | 3.4 µs   |
+| 0.1      | 27,0 µs             | 38,9 µs                | 69,9 µs  |
+| 1.0      | 27,5 µs             | 38,6 µs                | 71,0 µs  |
+| 5.0      | 60,8 µs             | 93,6 µs                | 251,5 µs |
+| 99.9     | 301,6 µs            | 933,3 µs               | 4,0 ms   |
+
+In this benchmark, a `&[u64; 10000]` slice was iterated which corresponds to 78
+KiB. `BitmapIter` from this crate clearly outperforms the other solutions.
+The data was collected on a i5-10600k but shows very similar behavior on modern
+x86 microarchitectures.
+
+[jv]: https://github.com/cyberus-technology/cloud-hypervisor/pull/36/files
+
 ## License
 
 MIT License. See [LICENSE](./LICENSE) file.

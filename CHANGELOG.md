@@ -3,6 +3,13 @@
 ## Unreleased
 
 
+## v0.2.3 - 2025-11-15
+
+- Add `BitposIteratorExt`: use `.bit_positions()` in an iterator to conveniently
+  create a `BitmapIter`
+- Improved documentation
+
+
 ## v0.2.2 - 2025-11-13
 
 - Improved documentation

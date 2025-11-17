@@ -36,6 +36,7 @@ macro_rules! impl_uint_trait {
             const ZERO: Self = 0;
             const ONE: Self = 1;
 
+            #[inline(always)]
             fn trailing_zeros(self) -> Self {
                 <$primitive_ty>::trailing_zeros(self) as Self
             }

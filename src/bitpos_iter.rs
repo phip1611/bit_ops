@@ -141,7 +141,7 @@ where
 #[derive(Debug)]
 pub struct BitmapIter<U, I> {
     bitmap_iter: I,
-    consumed_count: usize,
+    consumed_bits: usize,
     current_element_it: BitsIter<U>,
 }
 
@@ -167,7 +167,7 @@ where
         let current_element_it = BitsIter::new(bitmap_iter.next().unwrap_or(U::ZERO));
         Self {
             bitmap_iter,
-            consumed_count: 0,
+            consumed_bits: 0,
             current_element_it,
         }
     }
@@ -181,16 +181,23 @@ where
 
     #[inline]
     fn next(&mut self) -> Option<Self::Item> {
+        // PERFORMANCE: For performance-reasons, I refrain from a checked
+        // addition. 2^61 bytes / 2^64 bits (usize on a 64-bit system) are more
+        // than enough, and it is unlikely that users will ever have bitmaps
+        // that large.
         loop {
             // We return here, if we currently have an element.
             if let Some(bit) = self.current_element_it.next() {
+                // Compiled will optimize this check in most cases away.
                 let bit: usize = bit.try_into().unwrap();
-                return Some(bit + self.consumed_count);
+                // Unchecked add: see performance comment above
+                return Some(self.consumed_bits + bit);
             }
 
             // Current byte exhausted: load next one or return `None` / exit.
             let next_byte = self.bitmap_iter.next()?;
-            self.consumed_count += U::BITS;
+            // Unchecked add: see performance comment above
+            self.consumed_bits += U::BITS;
             self.current_element_it = BitsIter::new(next_byte);
         }
     }

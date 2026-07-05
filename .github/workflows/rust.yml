@@ -58,7 +58,9 @@ jobs:
           cargo build --verbose --target thumbv7em-none-eabihf
       - name: cargo build (release)
         run: cargo build --verbose --release
-      - run: cargo test --verbose
+      - run: |
+          cargo test --verbose
+          cargo test --verbose --release
 
   bench:
     strategy:

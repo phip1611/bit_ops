@@ -91,9 +91,14 @@ pub trait BitOps: Copy + Sized {
     ///
     /// # Parameters
     ///
-    /// - `bits`: Amount of bits of `value` that are relevant.
-    /// - `shift`: Relevant position of bits inside `value`, starting from the
+    /// - `bits`: Amount of bits of `self` that are relevant.
+    /// - `shift`: Relevant position of bits inside `self`, starting from the
     ///   right/LSB (`0`).
+    ///
+    /// # Panics
+    ///
+    /// This function panics if `bits` and `shift` describe a span outside the
+    /// range of the underlying type.
     #[must_use]
     fn toggle_bits(self, bits: Self, shift: Self) -> Self;
 
@@ -101,15 +106,15 @@ pub trait BitOps: Copy + Sized {
     ///
     /// # Parameters
     ///
-    /// - `value`: New value/bits to be set in `base`.
+    /// - `value`: New value/bits to be set in `self`.
     /// - `value_bits`: Amount of bits of `value` that are relevant.
     /// - `value_shift`: Position of `value` inside `self`, starting from the
     ///   right/LSB (`0`).
     ///
     /// # Panics
     ///
-    /// This function panics for overflowing shifts and bit positions that
-    /// are outside the range of the underlying type.
+    /// This function panics if `value_bits` and `value_shift` describe a span
+    /// outside the range of the underlying type.
     #[must_use]
     fn set_bits(self, value: Self, value_bits: Self, value_shift: Self) -> Self;
 
@@ -118,14 +123,15 @@ pub trait BitOps: Copy + Sized {
     ///
     /// # Parameters
     ///
-    /// - `base`: Base value to alter.
+    /// - `self`: Base value to alter.
     /// - `ops`: Tuple of (`value`, `value_bits`, `value_shift`) where each
     ///   tuple member corresponds to the parameters in [`Self::set_bits`].
     ///
     /// # Panics
     ///
-    /// This function panics for overflowing shifts and bit positions that
-    /// are outside the range of the underlying type.
+    /// This function panics if an operation's `value_bits` and `value_shift`
+    /// describe a span outside the range of the underlying type. Empty spans
+    /// may use a shift equal to the bit width.
     #[must_use]
     fn set_bits_n(
         self,
@@ -141,15 +147,15 @@ pub trait BitOps: Copy + Sized {
     ///
     /// # Parameters
     ///
-    /// - `value`: New value/bits to be set in `base`.
+    /// - `value`: New value/bits to be set in `self`.
     /// - `value_bits`: Amount of bits of `value` that are relevant.
     /// - `value_shift`: Position of `value` inside `self`, starting from the
     ///   right/LSB (`0`).
     ///
     /// # Panics
     ///
-    /// This function panics for overflowing shifts and bit positions that
-    /// are outside the range of the underlying type.
+    /// This function panics if `value_bits` and `value_shift` describe a span
+    /// outside the range of the underlying type.
     #[must_use]
     fn set_bits_exact(self, value: Self, value_bits: Self, value_shift: Self) -> Self;
 
@@ -157,14 +163,15 @@ pub trait BitOps: Copy + Sized {
     ///
     /// # Parameters
     ///
-    /// - `base`: Base value to alter.
+    /// - `self`: Base value to alter.
     /// - `ops`: Tuple of (`value`, `value_bits`, `value_shift`) where each
     ///   tuple member corresponds to the parameters in [`Self::set_bits_exact`].
     ///
     /// # Panics
     ///
-    /// This function panics for overflowing shifts and bit positions that
-    /// are outside the range of the underlying type.
+    /// This function panics if an operation's `value_bits` and `value_shift`
+    /// describe a span outside the range of the underlying type. Empty spans
+    /// may use a shift equal to the bit width.
     #[must_use]
     fn set_bits_exact_n(
         self,
@@ -199,9 +206,14 @@ pub trait BitOps: Copy + Sized {
     ///
     /// # Parameters
     ///
-    /// - `value_bits`: Amount of bits of `value` that are relevant.
-    /// - `value_shift`: Position of `value` inside `self`, starting from the
+    /// - `value_bits`: Amount of bits of `self` that are relevant.
+    /// - `value_shift`: Position of the span inside `self`, starting from the
     ///   right/LSB (`0`).
+    ///
+    /// # Panics
+    ///
+    /// This function panics if `value_bits` and `value_shift` describe a span
+    /// outside the range of the underlying type.
     #[must_use]
     fn get_bits(self, value_bits: Self, value_shift: Self) -> Self;
 

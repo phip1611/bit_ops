@@ -57,7 +57,7 @@ fn main() {
 ## MSRV
 
 <!-- Keep in sync with lib.rs and Cargo.toml!  -->
-1.85 stable
+1.85.1 stable
 
 ## Benchmarks
 

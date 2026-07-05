@@ -50,6 +50,11 @@ impl_mod!(usize);
 #[cfg(test)]
 mod tests {
     use super::*;
+    use std::panic::{AssertUnwindSafe, catch_unwind};
+
+    fn assert_panics(f: impl FnOnce()) {
+        assert!(catch_unwind(AssertUnwindSafe(f)).is_err());
+    }
 
     #[test]
     fn set_bit() {
@@ -141,6 +146,7 @@ mod tests {
     fn toggle_bits() {
         assert_eq!(bitops_u8::toggle_bits(0, 0, 0), 0);
         assert_eq!(bitops_u8::toggle_bits(1, 0, 0), 1);
+        assert_eq!(bitops_u8::toggle_bits(5, 0, 8), 5);
         assert_eq!(bitops_u8::toggle_bits(0b111, 2, 1), 1);
         assert_eq!(bitops_u8::toggle_bits(0, 2, 1), 0b110);
 
@@ -151,9 +157,22 @@ mod tests {
     }
 
     #[test]
+    fn toggle_bits_panics_on_invalid_span() {
+        // An 8-bit span shifted by one bit no longer fits in a `u8`.
+        assert_panics(|| {
+            let _ = bitops_u8::toggle_bits(0, 8, 1);
+        });
+        // A non-empty span may not start at the first bit past a `u8`.
+        assert_panics(|| {
+            let _ = bitops_u8::toggle_bits(0, 1, 8);
+        });
+    }
+
+    #[test]
     fn set_bits() {
         assert_eq!(bitops_u8::set_bits(0, 0, 0, 0), 0);
         assert_eq!(bitops_u8::set_bits(5, 0, 0, 0), 5);
+        assert_eq!(bitops_u8::set_bits(5, u8::MAX, 0, 8), 5);
         assert_eq!(bitops_u8::set_bits(0b100, 0b11, 2, 0), 0b111);
         assert_eq!(bitops_u8::set_bits(0b100, 0b11, 2, 2), 0b1100);
         assert_eq!(bitops_u8::set_bits(0b100, 0b11, 1, 0), 0b101);
@@ -171,8 +190,21 @@ mod tests {
     }
 
     #[test]
+    fn set_bits_panics_on_invalid_span() {
+        // An 8-bit span shifted by one bit no longer fits in a `u8`.
+        assert_panics(|| {
+            let _ = bitops_u8::set_bits(0, u8::MAX, 8, 1);
+        });
+        // A non-empty span may not start at the first bit past a `u8`.
+        assert_panics(|| {
+            let _ = bitops_u8::set_bits(0, 1, 1, 8);
+        });
+    }
+
+    #[test]
     fn set_bits_exact() {
         assert_eq!(bitops_u8::set_bits_exact(0, 0, 0, 0), 0);
+        assert_eq!(bitops_u8::set_bits_exact(5, u8::MAX, 0, 8), 5);
         assert_eq!(
             bitops_u8::set_bits_exact(0b1000_1100, 0b010, 3, 0),
             0b1000_1010
@@ -191,6 +223,18 @@ mod tests {
             bitops_u64::set_bits_exact(0b11111111, 0b10101, 5, 3),
             0b10101111
         );
+    }
+
+    #[test]
+    fn set_bits_exact_panics_on_invalid_span() {
+        // An 8-bit span shifted by one bit no longer fits in a `u8`.
+        assert_panics(|| {
+            let _ = bitops_u8::set_bits_exact(u8::MAX, 0, 8, 1);
+        });
+        // A non-empty span may not start at the first bit past a `u8`.
+        assert_panics(|| {
+            let _ = bitops_u8::set_bits_exact(0, 1, 1, 8);
+        });
     }
 
     #[test]
@@ -245,6 +289,28 @@ mod tests {
 
         assert_eq!(bitops_u64::create_mask(0), 0);
         assert_eq!(bitops_u64::create_mask(64), u64::MAX);
+    }
+
+    #[test]
+    fn get_bits() {
+        assert_eq!(bitops_u8::get_bits(0b1101, 3, 0), 0b101);
+        assert_eq!(bitops_u8::get_bits(0b1101, 3, 1), 0b110);
+        assert_eq!(bitops_u8::get_bits(0xff, 8, 0), 0xff);
+        assert_eq!(bitops_u8::get_bits(0xff, 0, 8), 0);
+
+        assert_eq!(bitops_u64::get_bits(u64::MAX, 64, 0), u64::MAX);
+    }
+
+    #[test]
+    fn get_bits_panics_on_invalid_span() {
+        // An 8-bit span shifted by one bit no longer fits in a `u8`.
+        assert_panics(|| {
+            let _ = bitops_u8::get_bits(u8::MAX, 8, 1);
+        });
+        // A non-empty span may not start at the first bit past a `u8`.
+        assert_panics(|| {
+            let _ = bitops_u8::get_bits(0, 1, 8);
+        });
     }
 
     /// This tests various functions in combination using a real-world scenario.

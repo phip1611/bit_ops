@@ -2,6 +2,17 @@
 
 ## Unreleased
 
+## v0.2.4 - 2026-07-05
+
+- Trait `Uint` is now sealed. It was never intended to be used outside of this
+  crate.
+- Bit span operations now panic consistently when `bits + shift` exceeds the
+  underlying integer width. This affects `toggle_bits`, `set_bits`,
+  `set_bits_n`, `set_bits_exact`, `set_bits_exact_n`, and `get_bits` in the
+  function API and the corresponding `BitOps` trait methods.
+- Empty bit spans now consistently allow a shift equal to the integer width.
+  This affects the same functions.
+
 
 ## v0.2.3 - 2025-11-15
 

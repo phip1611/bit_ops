@@ -49,9 +49,7 @@ SOFTWARE.
 //! This crate exports a Function API and a Trait API. The Function API is
 //! the foundation and provides `no_std` and `const`-compatible functions. The
 //! Trait API won't be `const`-compatible unless `const` trait methods are
-//! supported by Rust (stable). This is not the case in Mid-2024 and the
-//! next months in Rust stable. `bit_ops` will adapt, as soon as this
-//! changes.
+//! supported by Rust stable. `bit_ops` will adapt as soon as this changes.
 //!
 //! Note that the most trivial bit operations, such as `"shift_bits"` or
 //! `"keep_bits"` won't be covered by the API, as this would introduce a

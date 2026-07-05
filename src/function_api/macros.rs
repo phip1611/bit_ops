@@ -35,12 +35,40 @@ macro_rules! impl_bit_ops {
             if inclusive {
                 assert!(
                     n <= BIT_COUNT,
-                    "bit position starts at 0 and should be less than or equal to `bitcount(type)`"
+                    concat!(
+                        "bit position starts at 0 and should be less than or equal to `",
+                        stringify!($primitive_ty),
+                        "::BITS`"
+                    )
                 );
             } else {
                 assert!(
                     n < BIT_COUNT,
-                    "bit position starts at 0 and should be less than `bitcount(type)`"
+                    concat!(
+                        "bit position starts at 0 and should be less than `",
+                        stringify!($primitive_ty),
+                        "::BITS`"
+                    )
+                );
+            }
+        }
+
+        /// Helper to ensure that the bits that are about to be set will not be
+        /// shifted outside the bounds of the underling type.
+        #[track_caller]
+        const fn assert_span_in_range(bits: $primitive_ty, shift: $primitive_ty) {
+            assert_in_range(bits, true);
+            if bits == 0 {
+                assert_in_range(shift, true);
+            } else {
+                assert_in_range(shift, false);
+                assert!(
+                    bits <= BIT_COUNT - shift,
+                    concat!(
+                        "bit span should fit into `",
+                        stringify!($primitive_ty),
+                        "::BITS`"
+                    )
                 );
             }
         }
@@ -253,8 +281,8 @@ macro_rules! impl_bit_ops {
         /// ```
         ///
         /// # Panics
-        /// This function panics for overflowing shifts and bit positions that
-        /// are outside the range of the underlying type.
+        /// This function panics if `bits` and `shift` describe a span outside
+        /// the range of the underlying type.
         #[must_use]
         #[inline]
         pub const fn toggle_bits(
@@ -262,8 +290,10 @@ macro_rules! impl_bit_ops {
             bits: $primitive_ty,
             shift: $primitive_ty,
         ) -> $primitive_ty {
-            assert_in_range(bits, true);
-            assert_in_range(shift, true);
+            assert_span_in_range(bits, shift);
+            if bits == 0 {
+                return base;
+            }
             let mask = create_mask(bits) << shift;
             base ^ mask
         }
@@ -301,8 +331,9 @@ macro_rules! impl_bit_ops {
         ///
         /// # Panics
         ///
-        /// This function panics for overflowing shifts and bit positions that
-        /// are outside the range of the underlying type.
+        /// This function panics if `value_bits` and `value_shift` describe a
+        /// span outside the range of the underlying type. Empty spans may use a
+        /// shift equal to the bit width.
         #[must_use]
         #[inline]
         pub const fn set_bits(
@@ -311,8 +342,10 @@ macro_rules! impl_bit_ops {
             value_bits: $primitive_ty,
             value_shift: $primitive_ty,
         ) -> $primitive_ty {
-            assert_in_range(value_bits, true);
-            assert_in_range(value_shift, true);
+            assert_span_in_range(value_bits, value_shift);
+            if value_bits == 0 {
+                return base;
+            }
             let value_mask = create_mask(value_bits);
             let value = value & value_mask;
             base | (value << value_shift)
@@ -353,8 +386,9 @@ macro_rules! impl_bit_ops {
         ///
         /// # Panics
         ///
-        /// This function panics for overflowing shifts and bit positions that
-        /// are outside the range of the underlying type.
+        /// This function panics if an operation's `value_bits` and
+        /// `value_shift` describe a span outside the range of the underlying
+        /// type.
         #[must_use]
         #[inline]
         pub const fn set_bits_n(
@@ -408,8 +442,9 @@ macro_rules! impl_bit_ops {
         ///
         /// # Panics
         ///
-        /// This function panics for overflowing shifts and bit positions that
-        /// are outside the range of the underlying type.
+        /// This function panics if `value_bits` and `value_shift` describe a
+        /// span outside the range of the underlying type. Empty spans may use a
+        /// shift equal to the bit width.
         #[must_use]
         #[inline]
         pub const fn set_bits_exact(
@@ -418,23 +453,28 @@ macro_rules! impl_bit_ops {
             value_bits: $primitive_ty,
             value_shift: $primitive_ty,
         ) -> $primitive_ty {
+            assert_span_in_range(value_bits, value_shift);
+            if value_bits == 0 {
+                return base;
+            }
             let clear_mask = create_mask(value_bits) << value_shift;
             let base = clear_bits(base, clear_mask);
             set_bits(base, value, value_bits, value_shift)
         }
 
-        /// Combination of [`set_bits_exact`] and [`set_bits_n`].
+        /// Version of [`set_bits_exact`] that applies a list of multiple
+        /// values to the base.
         ///
         /// # Parameters
         ///
         /// - `base`: Base value to alter.
         /// - `ops`: Tuple of (`value`, `value_bits`, `value_shift`) where each
-        ///   tuple member corresponds to the parameter in [`set_bits`].
+        ///   tuple member corresponds to the parameter in [`set_bits_exact`].
         ///
         /// # Example
         ///
         /// ```rust
-        #[doc = concat!("use bit_ops::bitops_", stringify!($primitive_ty), "::set_bits_n;")]
+        #[doc = concat!("use bit_ops::bitops_", stringify!($primitive_ty), "::set_bits_exact_n;")]
         ///
         /// // props of a fictional interrupt controller
         /// let vector = 0b1_1101;
@@ -444,7 +484,7 @@ macro_rules! impl_bit_ops {
         /// let delivery_mode_bits = 3;
         /// let delivery_mode_shift = 5;
         /// assert_eq!(
-        ///     set_bits_n(
+        ///     set_bits_exact_n(
         ///         0,
         ///         &[
         ///             (vector, vector_bits, vector_shift),
@@ -457,8 +497,9 @@ macro_rules! impl_bit_ops {
         ///
         /// # Panics
         ///
-        /// This function panics for overflowing shifts and bit positions that
-        /// are outside the range of the underlying type.
+        /// This function panics if an operation's `value_bits` and
+        /// `value_shift` describe a span outside the range of the underlying
+        /// type.
         #[must_use]
         #[inline]
         pub const fn set_bits_exact_n(
@@ -562,7 +603,7 @@ macro_rules! impl_bit_ops {
         ///
         /// - `base`: Base value to get a specific set of bits from.
         /// - `value_bits`: Amount of bits of `base` that are relevant.
-        /// - `value_shift`: Position of `value` inside `self`, starting from
+        /// - `value_shift`: Position of the span inside `base`, starting from
         ///                  the right/LSB (`0`).
         ///
         /// # Example
@@ -579,8 +620,9 @@ macro_rules! impl_bit_ops {
         ///
         /// # Panics
         ///
-        /// This function panics for overflowing shifts and bit positions that
-        /// are outside the range of the underlying type.
+        /// This function panics if `value_bits` and `value_shift` describe a
+        /// span outside the range of the underlying type. Empty spans may use a
+        /// shift equal to the bit width.
         #[must_use]
         #[inline]
         pub const fn get_bits(
@@ -588,6 +630,10 @@ macro_rules! impl_bit_ops {
             value_bits: $primitive_ty,
             value_shift: $primitive_ty,
         ) -> $primitive_ty {
+            assert_span_in_range(value_bits, value_shift);
+            if value_bits == 0 {
+                return 0;
+            }
             let mask = create_mask(value_bits);
             (base >> value_shift) & mask
         }

@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Trait `Uint` is now sealed
+
 
 ## v0.2.3 - 2025-11-15
 

@@ -11,9 +11,23 @@
 use core::fmt::Debug;
 use core::ops::{Add, BitAndAssign, Sub};
 
-/// **Internal helper** trait for [`BitsIter`].
+mod sealed {
+    pub trait Sealed {}
+}
+
+/// Sealed helper trait for [`BitsIter`].
+///
+/// This trait is implemented only for [`u8`], [`u16`], [`u32`], [`u64`],
+/// [`u128`], and [`usize`].
 pub trait Uint:
-    Copy + Eq + Add<Output = Self> + Sub<Output = Self> + Sized + BitAndAssign + TryInto<usize>
+    sealed::Sealed
+    + Copy
+    + Eq
+    + Add<Output = Self>
+    + Sub<Output = Self>
+    + Sized
+    + BitAndAssign
+    + TryInto<usize>
 {
     /// Number of bits of that type.
     const BITS: usize;
@@ -31,6 +45,8 @@ pub trait Uint:
 /// is `BITS - 1`.
 macro_rules! impl_uint_trait {
     ($primitive_ty:ty) => {
+        impl sealed::Sealed for $primitive_ty {}
+
         impl Uint for $primitive_ty {
             const BITS: usize = <$primitive_ty>::BITS as usize;
             const ZERO: Self = 0;

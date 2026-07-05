@@ -197,24 +197,28 @@ where
 
     #[inline]
     fn next(&mut self) -> Option<Self::Item> {
-        // PERFORMANCE: For performance-reasons, I refrain from a checked
-        // addition. 2^61 bytes / 2^64 bits (usize on a 64-bit system) are more
-        // than enough, and it is unlikely that users will ever have bitmaps
-        // that large.
+        // PERFORMANCE: Avoid `checked_add` in the hot path.
+        //
+        // `consumed_bits` is a bit offset. It can only overflow if the input
+        // bitmap represents more than `usize::MAX` bits. That corresponds to
+        // roughly 2 EiB of bitmap storage on 64-bit targets, or 512 MiB on
+        // 32-bit targets.
+        //
+        // Such inputs are outside the practical use cases for this iterator.
         loop {
             // We return here, if we currently have an element.
             if let Some(bit) = self.current_element_it.next() {
-                // Compiled will optimize this check in most cases away.
+                // Compiler will optimize this check in most cases away.
                 let bit: usize = bit.try_into().unwrap();
                 // Unchecked add: see performance comment above
                 return Some(self.consumed_bits + bit);
             }
 
-            // Current byte exhausted: load next one or return `None` / exit.
-            let next_byte = self.bitmap_iter.next()?;
+            // Current uint exhausted: load next one or return `None` / exit.
+            let next_uint = self.bitmap_iter.next()?;
             // Unchecked add: see performance comment above
             self.consumed_bits += U::BITS;
-            self.current_element_it = BitsIter::new(next_byte);
+            self.current_element_it = BitsIter::new(next_uint);
         }
     }
 }
